@@ -355,47 +355,39 @@ html, body {
 }
 
 @keyframes selfSpinLeft {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(-360deg); }
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(-360deg); }
 }
 
 @keyframes selfSpinRight {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* Avatar positioning inside orbit */
-.avatar-positioner {
+/* Cyber Node positioning inside orbit */
+.avatar-positioner, .orbit-node-anchor {
   position: absolute;
   top: 50%;
   left: 50%;
   pointer-events: auto;
 }
 
-/* Avatar Fly-In */
-.avatar-fly-in {
-  opacity: 0;
-  transform: scale(0.3) rotate(-180deg);
-  animation: avatarFlyIn 1s var(--ease-spring) forwards;
-  overflow: hidden;
+.cyber-node-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   box-sizing: border-box;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-@keyframes avatarFlyIn {
-  0% {
-    opacity: 0;
-    transform: scale(0.3) rotate(-180deg);
-    filter: blur(8px);
-  }
-  60% {
-    opacity: 1;
-    filter: blur(0px);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
-    filter: blur(0px);
-  }
+.cyber-node-card:hover {
+  filter: brightness(1.2);
 }
 
 /* Glow Effects */

@@ -47,21 +47,21 @@ export const TypewriterHeading: React.FC<TypewriterHeadingProps> = ({
   return (
     <h1
       id="hero-typewriter-heading"
-      className="hero-heading select-none"
+      className="hero-heading select-none text-slate-900"
       style={{
         fontFamily: "'Urbanist', sans-serif",
-        fontWeight: 600,
+        fontWeight: 700,
         letterSpacing: '-1.5px',
       }}
     >
-      <span className="text-white">{blackPart}</span>
-      {whitePart && <span className="text-[#A068FF] font-bold">{whitePart}</span>}
+      <span className="text-slate-900">{blackPart}</span>
+      {whitePart && <span className="text-blue-600 font-bold">{whitePart}</span>}
       <span
         className={`inline-block ml-1 font-normal select-none ${
           isDone ? 'cursor-blink' : 'cursor-typing'
         }`}
         style={{
-          color: '#A068FF',
+          color: '#2563eb',
           transform: 'translateY(-2px)',
         }}
         aria-hidden="true"

@@ -128,47 +128,47 @@ export const FeaturesNavBar: React.FC<FeaturesNavBarProps> = ({
     const score = analysis.overallRiskScore;
     if (score >= 80) {
       return (
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 text-xs font-mono font-bold animate-pulse">
-          <ShieldAlert className="w-3.5 h-3.5 text-rose-400" />
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-200 text-xs font-mono font-bold">
+          <ShieldAlert className="w-3.5 h-3.5 text-rose-600" />
           <span>{score}/100 CRITICAL</span>
         </div>
       );
     }
     if (score >= 65) {
       return (
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-500/20 text-orange-300 border border-orange-500/40 text-xs font-mono font-bold">
-          <ShieldAlert className="w-3.5 h-3.5 text-orange-400" />
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-50 text-orange-700 border border-orange-200 text-xs font-mono font-bold">
+          <ShieldAlert className="w-3.5 h-3.5 text-orange-600" />
           <span>{score}/100 HIGH</span>
         </div>
       );
     }
     if (score >= 45) {
       return (
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-mono font-bold">
-          <ShieldAlert className="w-3.5 h-3.5 text-amber-400" />
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-yellow-50 text-yellow-800 border border-yellow-200 text-xs font-mono font-bold">
+          <ShieldAlert className="w-3.5 h-3.5 text-yellow-600" />
           <span>{score}/100 SUSPICIOUS</span>
         </div>
       );
     }
     if (score >= 25) {
       return (
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-yellow-500/20 text-yellow-300 border border-yellow-500/40 text-xs font-mono font-bold">
-          <ShieldAlert className="w-3.5 h-3.5 text-yellow-400" />
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200 text-xs font-mono font-bold">
+          <ShieldAlert className="w-3.5 h-3.5 text-slate-600" />
           <span>{score}/100 MODERATE</span>
         </div>
       );
     }
     if (score >= 12) {
       return (
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-xs font-mono font-bold">
-          <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-xs font-mono font-bold">
+          <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
           <span>{score}/100 LOW RISK</span>
         </div>
       );
     }
     return (
-      <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-mono font-bold">
-        <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+      <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-mono font-bold">
+        <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
         <span>{score}/100 BENIGN</span>
       </div>
     );
@@ -179,27 +179,27 @@ export const FeaturesNavBar: React.FC<FeaturesNavBarProps> = ({
       id="features-navigation-bar" 
       className="sticky top-2 z-40 w-full transition-all duration-200"
     >
-      <div className="bg-slate-900/95 border border-slate-700/80 backdrop-blur-xl rounded-2xl p-2 sm:p-2.5 shadow-2xl shadow-black/80 space-y-2">
+      <div className="bg-white/95 border border-slate-200 backdrop-blur-xl rounded-2xl p-2 sm:p-2.5 shadow-md shadow-slate-200/50 space-y-2">
         
         {/* Top Control Strip */}
-        <div className="flex items-center justify-between gap-2 sm:gap-4 flex-wrap pb-1.5 border-b border-slate-800/80 px-1">
+        <div className="flex items-center justify-between gap-2 sm:gap-4 flex-wrap pb-1.5 border-b border-slate-200/80 px-1">
           
           {/* Left: Back to Landing button & Breadcrumb / Status */}
           <div className="flex items-center gap-2.5">
             <button
               onClick={onNavigateHome}
-              className="flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all cursor-pointer shadow-sm hover:scale-105 active:scale-95"
+              className="flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition-all cursor-pointer shadow-xs hover:scale-105 active:scale-95"
               title="Return to Hero Landing Page"
             >
-              <ArrowLeft className="w-3.5 h-3.5 text-cyan-400" />
+              <ArrowLeft className="w-3.5 h-3.5 text-blue-600" />
               <span>Landing</span>
             </button>
 
-            <div className="h-4 w-px bg-slate-800 hidden sm:block" />
+            <div className="h-4 w-px bg-slate-200 hidden sm:block" />
 
             <div className="hidden sm:flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-[11px] font-mono font-medium text-slate-300">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[11px] font-mono font-semibold text-slate-700">
                 Threat Intelligence Console
               </span>
             </div>
@@ -215,7 +215,7 @@ export const FeaturesNavBar: React.FC<FeaturesNavBarProps> = ({
                 id="feature-nav-scenario-select"
                 value={selectedSampleId}
                 onChange={(e) => onSelectSampleById(e.target.value)}
-                className="bg-slate-950/90 border border-slate-700 rounded-xl pl-2.5 pr-7 py-1 text-xs text-slate-200 font-mono focus:outline-none focus:border-[#A068FF] cursor-pointer appearance-none shadow-sm"
+                className="bg-white border border-slate-200 rounded-xl pl-2.5 pr-7 py-1 text-xs text-slate-800 font-mono font-medium focus:outline-none focus:border-blue-500 cursor-pointer appearance-none shadow-xs"
                 title="Switch Attack Scenario"
               >
                 {SAMPLE_THREATS.map((s) => (
@@ -224,14 +224,14 @@ export const FeaturesNavBar: React.FC<FeaturesNavBarProps> = ({
                   </option>
                 ))}
               </select>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2 pointer-events-none" />
+              <ChevronDown className="w-3.5 h-3.5 text-slate-500 absolute right-2 pointer-events-none" />
             </div>
 
             {/* Re-analyze Button */}
             <button
               onClick={onReAnalyze}
               disabled={isAnalyzing}
-              className="flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-semibold bg-gradient-to-r from-[#A068FF] to-cyan-500 hover:from-[#8f4ff8] hover:to-cyan-400 text-white shadow-md transition-all cursor-pointer disabled:opacity-50 active:scale-95"
+              className="flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white shadow-sm transition-all cursor-pointer disabled:opacity-50 active:scale-95"
               title="Execute Real-Time Scan"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isAnalyzing ? 'animate-spin' : ''}`} />
@@ -253,17 +253,17 @@ export const FeaturesNavBar: React.FC<FeaturesNavBarProps> = ({
                   window.location.hash = `scanner/${tab.id}`;
                   window.scrollTo({ top: 0, behavior: 'instant' });
                 }}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap cursor-pointer ${
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap cursor-pointer ${
                   isActive
-                    ? 'bg-[#A068FF] text-white border border-[#c4b5fd]/60 shadow-lg shadow-[#A068FF]/20 ring-1 ring-[#A068FF]'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800/80 border border-slate-800/80 bg-slate-950/60'
+                    ? 'bg-blue-600 text-white border border-blue-600 shadow-md font-black'
+                    : 'text-black hover:text-blue-700 hover:bg-slate-100 border border-slate-300 bg-white font-bold'
                 }`}
               >
                 {tab.icon}
                 <span>{tab.label}</span>
                 {tab.badge && (
-                  <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full border ${
-                    isActive ? 'bg-white/20 text-white border-white/40 font-bold' : 'bg-slate-800 text-slate-400 border-slate-700'
+                  <span className={`text-[11px] font-mono px-1.5 py-0.2 rounded-full border ${
+                    isActive ? 'bg-white/25 text-white border-white/50 font-black' : 'bg-slate-100 text-black border-slate-300 font-bold'
                   }`}>
                     {tab.badge}
                   </span>

@@ -17,11 +17,11 @@ export const RecommendationsActionCenter: React.FC<RecommendationsActionCenterPr
   const getPriorityBadge = (p: string) => {
     switch (p) {
       case 'Immediate':
-        return 'bg-rose-500/10 text-rose-400 border-rose-500/30';
+        return 'bg-rose-50 text-rose-700 border-rose-200';
       case 'Secondary':
-        return 'bg-amber-500/10 text-amber-400 border-amber-500/30';
+        return 'bg-amber-50 text-amber-800 border-amber-200';
       default:
-        return 'bg-purple-500/10 text-purple-400 border-purple-500/30';
+        return 'bg-indigo-50 text-indigo-700 border-indigo-200';
     }
   };
 
@@ -70,19 +70,19 @@ ${analysis.recommendations.map(r => `[${r.priority}] ${r.action}: ${r.detail}`).
 
   return (
     <div className="container">
-      <div id="cybersentinel-recommendations-panel" className="card p-5 sm:p-6 shadow-xl relative overflow-hidden">
+      <div id="cybersentinel-recommendations-panel" className="card p-5 sm:p-6 shadow-sm border border-slate-200 bg-white relative overflow-hidden">
         
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-4 border-b border-slate-800 relative z-10">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-4 border-b border-slate-200 relative z-10">
           <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <div className="p-1.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
               <ShieldCheck className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="innerText text-sm font-semibold uppercase tracking-wide">
+              <h3 className="text-sm font-bold uppercase tracking-wide text-slate-900">
                 Actionable Security Recommendations & SOC Remediation
               </h3>
-              <p className="desc text-xs">
+              <p className="text-xs text-slate-600">
                 Immediate containment steps, user guidance, and incident advisory escalation
               </p>
             </div>
@@ -92,32 +92,32 @@ ${analysis.recommendations.map(r => `[${r.priority}] ${r.action}: ${r.detail}`).
             <button
               id="btn-copy-markdown-report"
               onClick={handleCopyReport}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-cyan-950/60 hover:bg-cyan-900/60 text-cyan-300 border border-cyan-800/60 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 transition-colors cursor-pointer"
             >
-              {copiedReport ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <FileText className="w-3.5 h-3.5" />}
+              {copiedReport ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <FileText className="w-3.5 h-3.5" />}
               <span>{copiedReport ? 'Copied Markdown' : 'Copy SOC Markdown'}</span>
             </button>
 
             <button
               id="btn-copy-json-report"
               onClick={handleCopyJson}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 shadow-2xs transition-colors cursor-pointer"
             >
-              {copiedJson ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+              {copiedJson ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
               <span>{copiedJson ? 'Copied JSON' : 'Export JSON'}</span>
             </button>
           </div>
         </div>
 
         {/* Recommendations Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5 relative z-10">
           {recommendations.map((rec, idx) => (
             <div key={idx} className="container">
               <div
                 id={`rec-card-${idx}`}
-                className="card p-4 flex items-start gap-3 hover:border-slate-500 transition-all"
+                className="card p-4 flex items-start gap-3 hover:border-slate-300 transition-all bg-white border border-slate-200 shadow-2xs"
               >
-                <div className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-cyan-400 shrink-0 mt-0.5">
+                <div className="p-2 rounded-lg bg-blue-50 border border-blue-200 text-blue-600 shrink-0 mt-0.5">
                   <CheckCircle2 className="w-4 h-4" />
                 </div>
                 <div className="space-y-1">
@@ -125,11 +125,11 @@ ${analysis.recommendations.map(r => `[${r.priority}] ${r.action}: ${r.detail}`).
                     <span className={`text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded border ${getPriorityBadge(rec.priority)}`}>
                       {rec.priority}
                     </span>
-                    <span className="innerText text-xs font-bold">
+                    <span className="text-xs font-bold text-slate-900">
                       {rec.action}
                     </span>
                   </div>
-                  <p className="desc text-xs leading-relaxed">
+                  <p className="text-xs text-slate-600 leading-relaxed">
                     {rec.detail}
                   </p>
                 </div>

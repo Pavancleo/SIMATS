@@ -13,6 +13,7 @@ import { ProjectedImpactSimulator } from './components/ProjectedImpactSimulator'
 import { RecommendationsActionCenter } from './components/RecommendationsActionCenter';
 import { FeaturesNavBar, FeatureTabType } from './components/FeaturesNavBar';
 import { JudgePitchModal } from './components/JudgePitchModal';
+import { CodexRevealBackground } from './components/CodexRevealBackground';
 import { SAMPLE_THREATS, SampleThreatItem } from './data/sampleThreats';
 import { ThreatInput, FullThreatAnalysisResult } from './types';
 import { generateDynamicHeuristicAnalysis } from './utils/threatAnalyzer';
@@ -180,7 +181,7 @@ export default function App() {
   const nextPage = currentIdx < ALL_PAGES.length - 1 ? ALL_PAGES[currentIdx + 1] : null;
 
   return (
-    <div id="cybersentinel-root" className="min-h-screen bg-[#0a0a0a] text-slate-100 flex flex-col selection:bg-[#A068FF]/30 selection:text-white">
+    <div id="cybersentinel-root" className="min-h-screen bg-slate-50 text-slate-900 flex flex-col selection:bg-blue-100 selection:text-blue-900">
       
       {/* =============================================================
           PAGE 1: LANDING & HERO HOME PAGE (FIT TO VIEWPORT)
@@ -210,24 +211,24 @@ export default function App() {
             </main>
 
             {/* Compact Bottom Footer */}
-            <footer className="border-t border-slate-800/80 bg-slate-950/80 py-3 px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-500 z-30">
+            <footer className="border-t border-slate-200 bg-white/80 py-3 px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-600 z-30">
               <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
-                  <Shield className="w-3.5 h-3.5 text-[#A068FF]" />
-                  <span className="font-semibold text-slate-300 text-xs">CyberSentinel: AI-Based Phishing & Social Engineering Detector</span>
+                  <Shield className="w-3.5 h-3.5 text-blue-600" />
+                  <span className="font-semibold text-slate-800 text-xs">CyberSentinel: AI-Based Phishing & Social Engineering Detector</span>
                 </div>
                 <div className="flex items-center gap-4">
                   <button
                     onClick={() => navigateTo('scanner', 'ingest')}
-                    className="text-[#c4b5fd] hover:text-white font-medium cursor-pointer text-xs flex items-center gap-1.5"
+                    className="text-blue-600 hover:text-blue-800 font-semibold cursor-pointer text-xs flex items-center gap-1.5"
                   >
-                    <Terminal className="w-3 h-3 text-[#A068FF]" />
+                    <Terminal className="w-3 h-3 text-blue-600" />
                     <span>Launch Live AI Scanner →</span>
                   </button>
-                  <span className="text-slate-700 hidden sm:inline">|</span>
+                  <span className="text-slate-300 hidden sm:inline">|</span>
                   <button
                     onClick={() => setIsJudgeModalOpen(true)}
-                    className="text-[#A068FF] hover:underline font-medium cursor-pointer text-xs"
+                    className="text-indigo-600 hover:underline font-semibold cursor-pointer text-xs"
                   >
                     10-Stage Evaluation Pitch
                   </button>
@@ -242,18 +243,22 @@ export default function App() {
           PAGE 2: DEDICATED THREAT INTELLIGENCE & DETECTION SCANNER PAGE
           ============================================================= */}
       {currentView === 'scanner' && (
-        <div className="flex-1 flex flex-col justify-between animate-in fade-in duration-300 min-h-screen">
-          
-          {/* Dedicated Scanner Header */}
-          <Header
-            currentView="scanner"
-            onNavigate={navigateTo}
-            onOpenPitch={() => setIsJudgeModalOpen(true)}
-          />
+        <section className="relative bg-[#282828] overflow-hidden flex-1 flex flex-col justify-between animate-in fade-in duration-300 min-h-screen">
+          {/* Custom Geometric Carbon Weave Background */}
+          <div className="features-pattern-bg" />
 
-          {/* Scanner Page Content */}
-          <main className="flex-1 w-full bg-slate-950/95 py-4 sm:py-6 px-4 sm:px-6 lg:px-8 relative z-30">
-            <div className="max-w-7xl mx-auto space-y-6">
+          {/* Content Layer (make sure it has relative z-10) */}
+          <div className="relative z-10 flex-1 flex flex-col justify-between">
+            {/* Dedicated Scanner Header */}
+            <Header
+              currentView="scanner"
+              onNavigate={navigateTo}
+              onOpenPitch={() => setIsJudgeModalOpen(true)}
+            />
+
+            {/* Scanner Page Content */}
+            <main className="flex-1 w-full py-4 sm:py-6 px-3 sm:px-6 lg:px-8 xl:px-10 relative z-10">
+              <div className="w-full space-y-6">
               
               {/* Dedicated Sticky Features Navigation Bar */}
               <FeaturesNavBar
@@ -269,16 +274,16 @@ export default function App() {
 
               {/* Loading State Banner */}
               {isAnalyzing && (
-                <div className="bg-slate-900/90 border border-[#A068FF]/40 rounded-2xl p-8 sm:p-12 shadow-2xl flex flex-col items-center justify-center text-center space-y-4 py-16 animate-pulse">
-                  <div className="relative flex items-center justify-center w-16 h-16 rounded-full bg-[#A068FF]/20 border border-[#A068FF]/50">
-                    <ShieldAlert className="w-8 h-8 text-[#A068FF] animate-bounce" />
-                    <span className="absolute inset-0 rounded-full border-2 border-[#A068FF] border-t-transparent animate-spin" />
+                <div className="bg-white border border-slate-200 rounded-2xl p-8 sm:p-12 shadow-sm flex flex-col items-center justify-center text-center space-y-4 py-16 animate-pulse">
+                  <div className="relative flex items-center justify-center w-16 h-16 rounded-full bg-blue-50 border border-blue-200">
+                    <ShieldAlert className="w-8 h-8 text-blue-600 animate-bounce" />
+                    <span className="absolute inset-0 rounded-full border-2 border-blue-600 border-t-transparent animate-spin" />
                   </div>
                   <div className="space-y-1">
-                    <h3 className="text-base font-bold text-white font-['Urbanist']">
+                    <h3 className="text-base font-bold text-slate-900 font-['Urbanist']">
                       CyberSentinel AI Threat Scan in Progress...
                     </h3>
-                    <p className="text-xs text-slate-400 max-w-sm">
+                    <p className="text-xs text-slate-600 max-w-sm">
                       Evaluating NLP tone, extracting psychological lures, verifying domain envelopes, and mapping MITRE ATT&CK techniques.
                     </p>
                   </div>
@@ -287,8 +292,8 @@ export default function App() {
 
               {/* Error State */}
               {errorMsg && !isAnalyzing && (
-                <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-3">
-                  <AlertTriangle className="w-5 h-5 shrink-0 text-rose-400" />
+                <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center gap-3">
+                  <AlertTriangle className="w-5 h-5 shrink-0 text-rose-600" />
                   <span>{errorMsg}</span>
                 </div>
               )}
@@ -300,37 +305,37 @@ export default function App() {
                 <div className="space-y-6 animate-in fade-in duration-200">
                   {/* Problem Statement Mission Bar */}
                   <div className="container">
-                    <div className="card p-5 sm:p-6 shadow-2xl relative overflow-hidden">
+                    <div className="card p-5 sm:p-6 shadow-md border border-white/80 bg-white/90 relative overflow-hidden">
                       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 relative z-10">
-                        <div className="space-y-2 max-w-3xl">
+                        <div className="space-y-2 flex-1">
                           <div className="flex items-center gap-2">
-                            <span className="px-3 py-1 text-xs font-mono font-bold rounded-full bg-[#A068FF]/20 text-[#A068FF] border border-[#A068FF]/40">
+                            <span className="px-3 py-1 text-xs font-mono font-bold rounded-full bg-blue-50 text-blue-800 border border-blue-200">
                               Challenge 8: CyberSentinel
                             </span>
-                            <span className="text-xs text-slate-400 font-mono">
+                            <span className="text-xs text-black font-bold font-mono">
                               AI-Based Phishing & Social Engineering Detector
                             </span>
                           </div>
-                          <h2 className="innerText text-xl sm:text-2xl font-bold tracking-tight">
+                          <h2 className="text-xl sm:text-2xl font-black tracking-tight text-black">
                             Executive Verdict & Threat Intelligence Dashboard
                           </h2>
-                          <p className="desc text-xs sm:text-sm text-slate-300 leading-relaxed">
+                          <p className="text-xs sm:text-sm text-black font-medium leading-relaxed">
                             Comprehensive evaluation combining neural linguistics, cognitive bias profiling, deceptive domain telemetry, and projected blast radius.
                           </p>
                         </div>
 
                         {/* Technologies Highlights */}
                         <div className="flex flex-wrap lg:flex-col gap-2 shrink-0">
-                          <div className="flex items-center gap-2 p-2 rounded-lg bg-slate-950/80 border border-slate-800 text-xs text-slate-300">
-                            <Brain className="w-4 h-4 text-[#A068FF]" />
+                          <div className="flex items-center gap-2 p-2 rounded-lg bg-white/80 border border-slate-200 text-xs text-black font-bold shadow-2xs">
+                            <Brain className="w-4 h-4 text-indigo-600" />
                             <span>NLP & Cognitive Bias Detection</span>
                           </div>
-                          <div className="flex items-center gap-2 p-2 rounded-lg bg-slate-950/80 border border-slate-800 text-xs text-slate-300">
-                            <Network className="w-4 h-4 text-cyan-400" />
+                          <div className="flex items-center gap-2 p-2 rounded-lg bg-white/80 border border-slate-200 text-xs text-black font-bold shadow-2xs">
+                            <Network className="w-4 h-4 text-blue-600" />
                             <span>Trust Graph & Domain Validation</span>
                           </div>
-                          <div className="flex items-center gap-2 p-2 rounded-lg bg-slate-950/80 border border-slate-800 text-xs text-slate-300">
-                            <Sparkles className="w-4 h-4 text-emerald-400" />
+                          <div className="flex items-center gap-2 p-2 rounded-lg bg-white/80 border border-slate-200 text-xs text-black font-bold shadow-2xs">
+                            <Sparkles className="w-4 h-4 text-emerald-600" />
                             <span>Explainable AI Annotations</span>
                           </div>
                         </div>
@@ -348,12 +353,12 @@ export default function App() {
                   <div className="space-y-3 pt-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-[#A068FF] animate-pulse" />
-                        <h3 className="text-sm font-semibold text-slate-200 uppercase tracking-wider font-mono">
+                        <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
+                        <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono">
                           Dedicated Threat Intelligence Pages
                         </h3>
                       </div>
-                      <span className="text-xs text-slate-400">
+                      <span className="text-xs text-slate-300">
                         Click any feature to open its dedicated view
                       </span>
                     </div>
@@ -363,20 +368,20 @@ export default function App() {
                       <div className="container">
                         <div
                           onClick={() => switchFeaturePage('ingest')}
-                          className="card p-5 cursor-pointer hover:border-blue-500/60 hover:scale-[1.02] transition-all group flex flex-col justify-between"
+                          className="card p-5 cursor-pointer hover:border-blue-400 hover:shadow-lg transition-all group flex flex-col justify-between bg-white border border-slate-200 shadow-sm"
                         >
                           <div className="space-y-2">
-                            <div className="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center border border-blue-500/30">
+                            <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-200">
                               <Terminal className="w-4 h-4" />
                             </div>
-                            <h4 className="innerText text-sm font-bold group-hover:text-blue-300 transition-colors">
+                            <h4 className="text-sm font-black text-black group-hover:text-blue-600 transition-colors">
                               Scan Ingestion & Protocol
                             </h4>
-                            <p className="desc text-xs text-slate-400 line-clamp-3">
+                            <p className="text-xs text-black font-medium line-clamp-3">
                               Inspect message content, target URLs, sender headers, SPF, DKIM, and DMARC alignment.
                             </p>
                           </div>
-                          <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-blue-400 font-semibold group-hover:text-white">
+                          <div className="pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-blue-700 font-bold group-hover:text-blue-900">
                             <span>Open Ingestion Page</span>
                             <span>→</span>
                           </div>
@@ -387,20 +392,20 @@ export default function App() {
                       <div className="container">
                         <div
                           onClick={() => switchFeaturePage('explainable')}
-                          className="card p-5 cursor-pointer hover:border-teal-500/60 hover:scale-[1.02] transition-all group flex flex-col justify-between"
+                          className="card p-5 cursor-pointer hover:border-teal-400 hover:shadow-lg transition-all group flex flex-col justify-between bg-white border border-slate-200 shadow-sm"
                         >
                           <div className="space-y-2">
-                            <div className="w-8 h-8 rounded-lg bg-teal-500/20 text-teal-400 flex items-center justify-center border border-teal-500/30">
+                            <div className="w-8 h-8 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center border border-teal-200">
                               <Sparkles className="w-4 h-4" />
                             </div>
-                            <h4 className="innerText text-sm font-bold group-hover:text-teal-300 transition-colors">
+                            <h4 className="text-sm font-black text-black group-hover:text-teal-600 transition-colors">
                               Explainable AI Evidence
                             </h4>
-                            <p className="desc text-xs text-slate-400 line-clamp-3">
+                            <p className="text-xs text-black font-medium line-clamp-3">
                               Interactive highlighted red-flags in message text and deep cognitive explanations.
                             </p>
                           </div>
-                          <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-teal-400 font-semibold group-hover:text-white">
+                          <div className="pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-teal-700 font-bold group-hover:text-teal-900">
                             <span>Open Evidence Page</span>
                             <span>→</span>
                           </div>
@@ -411,20 +416,20 @@ export default function App() {
                       <div className="container">
                         <div
                           onClick={() => switchFeaturePage('matrix')}
-                          className="card p-5 cursor-pointer hover:border-purple-500/60 hover:scale-[1.02] transition-all group flex flex-col justify-between"
+                          className="card p-5 cursor-pointer hover:border-indigo-400 hover:shadow-lg transition-all group flex flex-col justify-between bg-white border border-slate-200 shadow-sm"
                         >
                           <div className="space-y-2">
-                            <div className="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center border border-purple-500/30">
+                            <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center border border-indigo-200">
                               <Brain className="w-4 h-4" />
                             </div>
-                            <h4 className="innerText text-sm font-bold group-hover:text-purple-300 transition-colors">
+                            <h4 className="text-sm font-black text-black group-hover:text-indigo-600 transition-colors">
                               6-Perspective Matrix
                             </h4>
-                            <p className="desc text-xs text-slate-400 line-clamp-3">
+                            <p className="text-xs text-black font-medium line-clamp-3">
                               NLP semantics, social engineering triggers, deceptive links, sender identity, behavioral anomaly, and context.
                             </p>
                           </div>
-                          <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-purple-400 font-semibold group-hover:text-white">
+                          <div className="pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-indigo-700 font-bold group-hover:text-indigo-900">
                             <span>Open Matrix Page</span>
                             <span>→</span>
                           </div>
@@ -435,20 +440,20 @@ export default function App() {
                       <div className="container">
                         <div
                           onClick={() => switchFeaturePage('dna')}
-                          className="card p-5 cursor-pointer hover:border-rose-500/60 hover:scale-[1.02] transition-all group flex flex-col justify-between"
+                          className="card p-5 cursor-pointer hover:border-rose-400 hover:shadow-lg transition-all group flex flex-col justify-between bg-white border border-slate-200 shadow-sm"
                         >
                           <div className="space-y-2">
-                            <div className="w-8 h-8 rounded-lg bg-rose-500/20 text-rose-400 flex items-center justify-center border border-rose-500/30">
+                            <div className="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center border border-rose-200">
                               <Dna className="w-4 h-4" />
                             </div>
-                            <h4 className="innerText text-sm font-bold group-hover:text-rose-300 transition-colors">
+                            <h4 className="text-sm font-black text-black group-hover:text-rose-600 transition-colors">
                               Attack DNA & MITRE
                             </h4>
-                            <p className="desc text-xs text-slate-400 line-clamp-3">
+                            <p className="text-xs text-black font-medium line-clamp-3">
                               MITRE ATT&CK technique IDs, genetic attack markers, and severity weights.
                             </p>
                           </div>
-                          <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-rose-400 font-semibold group-hover:text-white">
+                          <div className="pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-rose-700 font-bold group-hover:text-rose-900">
                             <span>Open Attack DNA</span>
                             <span>→</span>
                           </div>
@@ -459,20 +464,20 @@ export default function App() {
                       <div className="container">
                         <div
                           onClick={() => switchFeaturePage('chain')}
-                          className="card p-5 cursor-pointer hover:border-amber-500/60 hover:scale-[1.02] transition-all group flex flex-col justify-between"
+                          className="card p-5 cursor-pointer hover:border-amber-400 hover:shadow-lg transition-all group flex flex-col justify-between bg-white border border-slate-200 shadow-sm"
                         >
                           <div className="space-y-2">
-                            <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center border border-amber-500/30">
+                            <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-200">
                               <GitCommit className="w-4 h-4" />
                             </div>
-                            <h4 className="innerText text-sm font-bold group-hover:text-amber-300 transition-colors">
+                            <h4 className="text-sm font-black text-black group-hover:text-amber-600 transition-colors">
                               Manipulation Chain
                             </h4>
-                            <p className="desc text-xs text-slate-400 line-clamp-3">
+                            <p className="text-xs text-black font-medium line-clamp-3">
                               Step-by-step cognitive exploitation timeline reconstructing attacker persuasion steps.
                             </p>
                           </div>
-                          <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-amber-400 font-semibold group-hover:text-white">
+                          <div className="pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-amber-700 font-bold group-hover:text-amber-900">
                             <span>Open Chain Timeline</span>
                             <span>→</span>
                           </div>
@@ -483,20 +488,20 @@ export default function App() {
                       <div className="container">
                         <div
                           onClick={() => switchFeaturePage('trust')}
-                          className="card p-5 cursor-pointer hover:border-cyan-500/60 hover:scale-[1.02] transition-all group flex flex-col justify-between"
+                          className="card p-5 cursor-pointer hover:border-blue-400 hover:shadow-lg transition-all group flex flex-col justify-between bg-white border border-slate-200 shadow-sm"
                         >
                           <div className="space-y-2">
-                            <div className="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center border border-cyan-500/30">
+                            <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-200">
                               <Network className="w-4 h-4" />
                             </div>
-                            <h4 className="innerText text-sm font-bold group-hover:text-cyan-300 transition-colors">
+                            <h4 className="text-sm font-black text-black group-hover:text-blue-600 transition-colors">
                               Trust Graph Mapping
                             </h4>
-                            <p className="desc text-xs text-slate-400 line-clamp-3">
+                            <p className="text-xs text-black font-medium line-clamp-3">
                               Visual entity relationship graph mapping claimed vs actual trust boundaries and DNS.
                             </p>
                           </div>
-                          <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-cyan-400 font-semibold group-hover:text-white">
+                          <div className="pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-blue-700 font-bold group-hover:text-blue-900">
                             <span>Open Trust Graph</span>
                             <span>→</span>
                           </div>
@@ -507,20 +512,20 @@ export default function App() {
                       <div className="container">
                         <div
                           onClick={() => switchFeaturePage('impact')}
-                          className="card p-5 cursor-pointer hover:border-orange-500/60 hover:scale-[1.02] transition-all group flex flex-col justify-between"
+                          className="card p-5 cursor-pointer hover:border-orange-400 hover:shadow-lg transition-all group flex flex-col justify-between bg-white border border-slate-200 shadow-sm"
                         >
                           <div className="space-y-2">
-                            <div className="w-8 h-8 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center border border-orange-500/30">
+                            <div className="w-8 h-8 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center border border-orange-200">
                               <Flame className="w-4 h-4" />
                             </div>
-                            <h4 className="innerText text-sm font-bold group-hover:text-orange-300 transition-colors">
+                            <h4 className="text-sm font-black text-black group-hover:text-orange-600 transition-colors">
                               Breach Impact Simulation
                             </h4>
-                            <p className="desc text-xs text-slate-400 line-clamp-3">
+                            <p className="text-xs text-black font-medium line-clamp-3">
                               Blast radius projections across financial loss, compliance fines, and data breach.
                             </p>
                           </div>
-                          <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-orange-400 font-semibold group-hover:text-white">
+                          <div className="pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-orange-700 font-bold group-hover:text-orange-900">
                             <span>Open Impact Simulator</span>
                             <span>→</span>
                           </div>
@@ -531,20 +536,20 @@ export default function App() {
                       <div className="container">
                         <div
                           onClick={() => switchFeaturePage('remediation')}
-                          className="card p-5 cursor-pointer hover:border-emerald-500/60 hover:scale-[1.02] transition-all group flex flex-col justify-between"
+                          className="card p-5 cursor-pointer hover:border-emerald-400 hover:shadow-lg transition-all group flex flex-col justify-between bg-white border border-slate-200 shadow-sm"
                         >
                           <div className="space-y-2">
-                            <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center border border-emerald-500/30">
+                            <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-200">
                               <ShieldCheck className="w-4 h-4" />
                             </div>
-                            <h4 className="innerText text-sm font-bold group-hover:text-emerald-300 transition-colors">
+                            <h4 className="text-sm font-black text-black group-hover:text-emerald-600 transition-colors">
                               SOC Remediation Playbook
                             </h4>
-                            <p className="desc text-xs text-slate-400 line-clamp-3">
+                            <p className="text-xs text-black font-medium line-clamp-3">
                               Immediate tactical checklist, executive summaries, and exportable Markdown/JSON reports.
                             </p>
                           </div>
-                          <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-emerald-400 font-semibold group-hover:text-white">
+                          <div className="pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-emerald-700 font-bold group-hover:text-emerald-900">
                             <span>Open SOC Playbook</span>
                             <span>→</span>
                           </div>
@@ -562,11 +567,11 @@ export default function App() {
                 <div className="space-y-6 animate-in fade-in duration-200">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                        <Terminal className="w-5 h-5 text-blue-400" />
+                      <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
+                        <Terminal className="w-7 h-7 text-blue-400" />
                         <span>Suspicious Content Ingestion & Protocol Inspector</span>
                       </h2>
-                      <p className="text-xs text-slate-400 mt-1">
+                      <p className="text-sm sm:text-base text-slate-200 font-semibold mt-1.5">
                         Ingest emails, SMS, social DMs, web URLs, or custom text with email protocol authentication headers
                       </p>
                     </div>
@@ -589,29 +594,29 @@ export default function App() {
                     <div className="lg:col-span-4 space-y-4">
                       {selectedSample && (
                         <div className="container">
-                          <div className="card p-5 text-xs text-slate-400 space-y-3 shadow-lg">
-                            <div className="flex items-center justify-between text-slate-300 font-medium">
-                              <span className="font-semibold text-slate-200">Loaded Threat Scenario:</span>
+                          <div className="card p-5 text-xs space-y-3 shadow-md bg-white border border-slate-200">
+                            <div className="flex items-center justify-between font-medium">
+                              <span className="font-black text-black">Loaded Threat Scenario:</span>
                               <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                                selectedSample.threatLevelExpected === 'Critical' ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' :
-                                selectedSample.threatLevelExpected === 'High' ? 'bg-orange-500/20 text-orange-300 border border-orange-500/40' :
-                                selectedSample.threatLevelExpected === 'Suspicious' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' :
-                                selectedSample.threatLevelExpected === 'Moderate' ? 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/40' :
-                                selectedSample.threatLevelExpected === 'Low' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40' :
-                                'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                                selectedSample.threatLevelExpected === 'Critical' ? 'bg-rose-50 text-rose-700 border border-rose-200' :
+                                selectedSample.threatLevelExpected === 'High' ? 'bg-orange-50 text-orange-700 border border-orange-200' :
+                                selectedSample.threatLevelExpected === 'Suspicious' ? 'bg-yellow-50 text-yellow-800 border border-yellow-200' :
+                                selectedSample.threatLevelExpected === 'Moderate' ? 'bg-slate-100 text-slate-700 border border-slate-200' :
+                                selectedSample.threatLevelExpected === 'Low' ? 'bg-blue-50 text-blue-700 border border-blue-200' :
+                                'bg-emerald-50 text-emerald-700 border border-emerald-200'
                               }`}>
                                 {selectedSample.badge}
                               </span>
                             </div>
-                            <p className="innerText text-base font-semibold">{selectedSample.name}</p>
-                            <p className="desc text-xs leading-relaxed">{selectedSample.description}</p>
-                            <div className="pt-2 border-t border-slate-800 flex flex-col gap-2">
+                            <p className="text-base font-black text-black">{selectedSample.name}</p>
+                            <p className="text-xs text-black font-medium leading-relaxed">{selectedSample.description}</p>
+                            <div className="pt-2 border-t border-slate-200 flex flex-col gap-2">
                               <button
                                 onClick={() => {
                                   runAnalysis();
                                   switchFeaturePage('explainable');
                                 }}
-                                className="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-[#A068FF] to-cyan-500 text-white font-bold text-xs shadow-md hover:scale-[1.02] transition-transform cursor-pointer"
+                                className="w-full py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-colors cursor-pointer"
                               >
                                 Run AI Analysis & View Findings →
                               </button>
@@ -620,7 +625,7 @@ export default function App() {
                                   runAnalysis();
                                   switchFeaturePage('overview');
                                 }}
-                                className="w-full py-2 px-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-[#A068FF] text-slate-200 font-semibold text-xs transition-colors cursor-pointer"
+                                className="w-full py-2.5 px-3 rounded-xl bg-slate-100 border border-slate-200 hover:bg-slate-200 text-black font-bold text-xs sm:text-sm transition-colors cursor-pointer"
                               >
                                 Jump Directly to Final Verdict 🛡️
                               </button>
@@ -640,11 +645,11 @@ export default function App() {
                 <div className="space-y-6 animate-in fade-in duration-200">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                        <Sparkles className="w-5 h-5 text-teal-400" />
+                      <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
+                        <Sparkles className="w-7 h-7 text-teal-400" />
                         <span>Explainable AI Red-Flag & Linguistic Evidence Inspector</span>
                       </h2>
-                      <p className="text-xs text-slate-400 mt-1">
+                      <p className="text-sm sm:text-base text-slate-200 font-semibold mt-1.5">
                         Word-level red-flag token mapping, cognitive bias rationales, and psychological lure explanations
                       </p>
                     </div>
@@ -665,11 +670,11 @@ export default function App() {
                 <div className="space-y-6 animate-in fade-in duration-200">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                        <Brain className="w-5 h-5 text-purple-400" />
+                      <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
+                        <Brain className="w-7 h-7 text-indigo-400" />
                         <span>6-Perspective Multi-Layer Intelligence Matrix</span>
                       </h2>
-                      <p className="text-xs text-slate-400 mt-1">
+                      <p className="text-sm sm:text-base text-slate-200 font-semibold mt-1.5">
                         Deep evaluation across NLP semantic, social engineering, URL/domain, sender identity, behavioral anomaly, and context
                       </p>
                     </div>
@@ -686,11 +691,11 @@ export default function App() {
                 <div className="space-y-6 animate-in fade-in duration-200">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                        <Dna className="w-5 h-5 text-rose-400" />
+                      <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
+                        <Dna className="w-7 h-7 text-rose-400" />
                         <span>Attack DNA Breakdown & MITRE ATT&CK Matrix Alignment</span>
                       </h2>
-                      <p className="text-xs text-slate-400 mt-1">
+                      <p className="text-sm sm:text-base text-slate-200 font-semibold mt-1.5">
                         Genetic signature breakdown mapping threats directly to MITRE ATT&CK framework techniques
                       </p>
                     </div>
@@ -707,11 +712,11 @@ export default function App() {
                 <div className="space-y-6 animate-in fade-in duration-200">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                        <GitCommit className="w-5 h-5 text-amber-400" />
+                      <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
+                        <GitCommit className="w-7 h-7 text-amber-400" />
                         <span>Psychological Manipulation Chain Reconstruction</span>
                       </h2>
-                      <p className="text-xs text-slate-400 mt-1">
+                      <p className="text-sm sm:text-base text-slate-200 font-semibold mt-1.5">
                         5-Stage cognitive persuasion sequence tracing from initial hook to final exploitation
                       </p>
                     </div>
@@ -728,11 +733,11 @@ export default function App() {
                 <div className="space-y-6 animate-in fade-in duration-200">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                        <Network className="w-5 h-5 text-cyan-400" />
+                      <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
+                        <Network className="w-7 h-7 text-blue-400" />
                         <span>Trust Graph & Relational Identity Mapping</span>
                       </h2>
-                      <p className="text-xs text-slate-400 mt-1">
+                      <p className="text-sm sm:text-base text-slate-200 font-semibold mt-1.5">
                         Interactive entity trust boundaries comparing claimed organizational identity against verified SPF/DKIM DNS telemetry
                       </p>
                     </div>
@@ -749,11 +754,11 @@ export default function App() {
                 <div className="space-y-6 animate-in fade-in duration-200">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                        <Flame className="w-5 h-5 text-orange-400" />
+                      <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
+                        <Flame className="w-7 h-7 text-orange-400" />
                         <span>Projected Breach Impact & Blast Radius Simulation</span>
                       </h2>
-                      <p className="text-xs text-slate-400 mt-1">
+                      <p className="text-sm sm:text-base text-slate-200 font-semibold mt-1.5">
                         Simulates hypothetical organizational damage across financial loss, operational disruption, and compliance fines
                       </p>
                     </div>
@@ -770,11 +775,11 @@ export default function App() {
                 <div className="space-y-6 animate-in fade-in duration-200">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                        <ShieldCheck className="w-5 h-5 text-emerald-400" />
+                      <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
+                        <ShieldCheck className="w-7 h-7 text-emerald-400" />
                         <span>SOC Action Center & Remediation Playbook</span>
                       </h2>
-                      <p className="text-xs text-slate-400 mt-1">
+                      <p className="text-sm sm:text-base text-slate-200 font-semibold mt-1.5">
                         Actionable containment checklist, priority incident mitigation steps, and full SOC markdown export
                       </p>
                     </div>
@@ -789,18 +794,18 @@ export default function App() {
 
               {/* Feature Pager Toolbar (Previous / Next Page Navigator) */}
               {!isAnalyzing && analysis && (
-                <div className="flex items-center justify-between gap-3 p-3.5 bg-slate-900/80 border border-slate-800 rounded-2xl">
+                <div className="flex items-center justify-between gap-3 p-3.5 bg-white/95 backdrop-blur-md border border-slate-200 rounded-2xl shadow-lg">
                   {prevPage ? (
                     <button
                       onClick={() => switchFeaturePage(prevPage.id)}
-                      className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all cursor-pointer"
+                      className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition-all cursor-pointer shadow-xs"
                     >
                       <span>← {prevPage.label}</span>
                     </button>
                   ) : (
                     <button
                       onClick={() => navigateTo('home')}
-                      className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all cursor-pointer"
+                      className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition-all cursor-pointer shadow-xs"
                     >
                       <span>← Back to Landing</span>
                     </button>
@@ -809,7 +814,7 @@ export default function App() {
                   {activeTab !== 'overview' && (
                     <button
                       onClick={() => switchFeaturePage('overview')}
-                      className="px-3 py-1.5 rounded-lg text-xs text-[#A068FF] hover:bg-[#A068FF]/10 font-semibold cursor-pointer"
+                      className="px-3 py-1.5 rounded-lg text-xs text-blue-600 hover:bg-blue-50 font-semibold cursor-pointer"
                     >
                       Verdict Overview
                     </button>
@@ -818,7 +823,7 @@ export default function App() {
                   {nextPage && (
                     <button
                       onClick={() => switchFeaturePage(nextPage.id)}
-                      className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-[#A068FF] to-cyan-500 hover:from-[#8f4ff8] hover:to-cyan-400 text-white shadow-md transition-all cursor-pointer"
+                      className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white shadow-sm transition-all cursor-pointer"
                     >
                       <span>{nextPage.label} →</span>
                     </button>
@@ -829,30 +834,8 @@ export default function App() {
             </div>
           </main>
 
-          {/* Dedicated Scanner Footer */}
-          <footer className="border-t border-slate-800 bg-slate-950 py-4 px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-500">
-            <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => navigateTo('home')}
-                  className="text-cyan-400 hover:underline font-semibold cursor-pointer"
-                >
-                  ← Return to Landing
-                </button>
-                <span className="text-slate-700">|</span>
-                <span className="font-semibold text-slate-300">CyberSentinel AI Threat Engine</span>
-              </div>
-              <span>Technologies: NLP, LLMs, Machine Learning, Cybersecurity AI, URL Analysis, Anomaly Detection, Explainable AI</span>
-              <button
-                onClick={() => setIsJudgeModalOpen(true)}
-                className="text-[#A068FF] hover:underline font-medium cursor-pointer"
-              >
-                10-Stage Evaluation Pitch
-              </button>
-            </div>
-          </footer>
-
-        </div>
+          </div>
+        </section>
       )}
 
       {/* 10-Stage Evaluation Pitch Modal */}
@@ -863,7 +846,3 @@ export default function App() {
     </div>
   );
 }
-
-
-
-

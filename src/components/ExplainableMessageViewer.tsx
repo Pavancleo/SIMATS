@@ -18,40 +18,40 @@ export const ExplainableMessageViewer: React.FC<ExplainableMessageViewerProps> =
   const getCategoryBadgeColor = (category: string) => {
     switch (category) {
       case 'urgency':
-        return 'bg-amber-500/20 text-amber-300 border-amber-500/40';
+        return 'bg-amber-50 text-amber-800 border-amber-200';
       case 'fear':
-        return 'bg-rose-500/20 text-rose-300 border-rose-500/40';
+        return 'bg-rose-50 text-rose-800 border-rose-200';
       case 'authority':
-        return 'bg-purple-500/20 text-purple-300 border-purple-500/40';
+        return 'bg-indigo-50 text-indigo-800 border-indigo-200';
       case 'credential_lure':
-        return 'bg-red-500/20 text-red-300 border-red-500/40';
+        return 'bg-red-50 text-red-800 border-red-200';
       case 'link_deception':
-        return 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40';
+        return 'bg-blue-50 text-blue-800 border-blue-200';
       default:
-        return 'bg-yellow-500/20 text-yellow-300 border-yellow-500/40';
+        return 'bg-yellow-50 text-yellow-800 border-yellow-200';
     }
   };
 
   return (
     <div className="container">
-      <div id="cybersentinel-explainable-panel" className="card p-5 sm:p-6 shadow-xl relative overflow-hidden">
+      <div id="cybersentinel-explainable-panel" className="card p-5 sm:p-6 shadow-sm border border-slate-200 bg-white relative overflow-hidden">
         
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-4 border-b border-slate-800 relative z-10">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-4 border-b border-slate-200 relative z-10">
           <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-lg bg-teal-500/10 text-teal-400 border border-teal-500/20">
+            <div className="p-1.5 rounded-lg bg-blue-50 text-blue-700 border border-blue-200">
               <Sparkles className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="innerText text-sm font-semibold uppercase tracking-wide">
+              <h3 className="text-sm font-black uppercase tracking-wide text-black">
                 10. Explainable AI Rationale & Message Evidence Inspector
               </h3>
-              <p className="desc text-xs">
+              <p className="text-xs text-black font-medium">
                 Interactive explainability: Click flagged phrases to reveal exact threat reasoning and behavioral classification
               </p>
             </div>
           </div>
-          <span className="text-xs font-mono text-cyan-400 bg-cyan-950/40 px-2.5 py-1 rounded border border-cyan-800/40">
+          <span className="text-xs font-mono text-black bg-blue-50 px-2.5 py-1 rounded border border-blue-200 font-bold">
             {flags.length} Red-Flag Markers Identified
           </span>
         </div>
@@ -60,19 +60,19 @@ export const ExplainableMessageViewer: React.FC<ExplainableMessageViewerProps> =
           
           {/* Left / Top: Interactive Flagged Text View */}
           <div className="lg:col-span-7 space-y-3">
-            <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+            <div className="text-[11px] font-bold text-black uppercase tracking-wider flex items-center justify-between">
               <span>Payload Content Inspector:</span>
-              <span className="text-[10px] text-slate-500 font-normal">Click any flagged card below to inspect</span>
+              <span className="text-[10px] text-black font-semibold">Click any flagged card below to inspect</span>
             </div>
 
             {/* Raw Text Box */}
-            <div className="p-4 bg-slate-950/90 rounded-xl border border-slate-800 font-mono text-xs text-slate-300 whitespace-pre-wrap leading-relaxed max-h-72 overflow-y-auto">
+            <div className="p-4 bg-slate-50/90 rounded-xl border border-slate-300 font-mono text-xs text-black font-semibold whitespace-pre-wrap leading-relaxed max-h-72 overflow-y-auto">
               {content}
             </div>
 
             {/* Highlighted Evidence Cards */}
             <div className="space-y-2">
-              <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+              <div className="text-[11px] font-bold text-black uppercase tracking-wider">
                 Flagged Evidence Excerpts:
               </div>
               <div className="space-y-2">
@@ -82,24 +82,24 @@ export const ExplainableMessageViewer: React.FC<ExplainableMessageViewerProps> =
                     onClick={() => setSelectedFlag(flag)}
                     className={`p-3 rounded-xl border text-xs cursor-pointer transition-all ${
                       selectedFlag?.text === flag.text
-                        ? 'bg-slate-800/90 border-cyan-500/60 ring-1 ring-cyan-500/30'
-                        : 'bg-slate-950/60 border-slate-800 hover:border-slate-700'
+                        ? 'bg-blue-50 border-blue-500 ring-2 ring-blue-400 shadow-sm'
+                        : 'bg-white border-slate-300 hover:border-slate-400'
                     }`}
                   >
                     <div className="flex items-center justify-between gap-2 mb-1.5">
-                      <span className={`text-[10px] font-mono font-semibold uppercase px-2 py-0.5 rounded border ${getCategoryBadgeColor(flag.category)}`}>
+                      <span className={`text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded border ${getCategoryBadgeColor(flag.category)}`}>
                         {flag.category.replace('_', ' ')}
                       </span>
-                      <span className="text-[10px] font-mono text-slate-400 uppercase">
+                      <span className="text-[10px] font-mono text-black uppercase font-bold">
                         Severity: {flag.severity}
                       </span>
                     </div>
 
-                    <div className="font-mono text-xs text-cyan-300 font-semibold mb-1">
+                    <div className="font-mono text-xs text-blue-800 font-black mb-1">
                       "{flag.text}"
                     </div>
 
-                    <p className="text-xs text-slate-300">
+                    <p className="text-xs text-black font-medium leading-relaxed">
                       {flag.explanation}
                     </p>
                   </div>
@@ -110,41 +110,44 @@ export const ExplainableMessageViewer: React.FC<ExplainableMessageViewerProps> =
 
           {/* Right / Bottom: Why Dangerous Deep-Dive Rationale */}
           <div className="lg:col-span-5 space-y-4">
-            <div className="p-4 bg-slate-950/70 rounded-xl border border-slate-800 space-y-3">
+            <div className="p-4 bg-slate-50/90 rounded-xl border border-slate-300 space-y-3">
               <div className="flex items-center gap-2">
-                <ShieldAlert className="w-4 h-4 text-rose-400" />
-                <span className="text-xs font-bold text-slate-200 uppercase tracking-wider">
+                <ShieldAlert className="w-4 h-4 text-rose-600" />
+                <span className="text-xs font-black text-black uppercase tracking-wider">
                   Why CyberSentinel Flagged This Communication
                 </span>
               </div>
 
               <ul className="space-y-2.5">
                 {whyDangerous.map((reason, idx) => (
-                  <li key={idx} className="text-xs text-slate-300 leading-relaxed flex items-start gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-rose-400 mt-1.5 shrink-0" />
+                  <li key={idx} className="text-xs text-black font-medium leading-relaxed flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-rose-500 mt-1.5 shrink-0" />
                     <span>{reason}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Selected Flag Deep Rationale Popup if clicked */}
+            {/* Selected Flag Detail Box */}
             {selectedFlag && (
-              <div className="p-4 bg-cyan-950/30 rounded-xl border border-cyan-500/30 space-y-2 animate-in fade-in duration-150">
-                <div className="text-[10px] font-semibold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
-                  <Info className="w-3.5 h-3.5" />
-                  Active Focus Signal
+              <div className="p-4 bg-blue-50/90 rounded-xl border border-blue-300 space-y-2 animate-in fade-in duration-150">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-mono font-bold text-blue-900 uppercase">
+                    Deep Inspector Token:
+                  </span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-200 text-blue-950 font-mono">
+                    {selectedFlag.category}
+                  </span>
                 </div>
-                <div className="text-xs font-mono text-white font-bold">
+                <div className="text-xs font-mono font-black text-blue-900">
                   "{selectedFlag.text}"
                 </div>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <p className="text-xs text-black font-medium leading-relaxed">
                   {selectedFlag.explanation}
                 </p>
               </div>
             )}
           </div>
-
         </div>
 
       </div>

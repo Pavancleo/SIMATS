@@ -69,8 +69,8 @@ export const HeroLeft: React.FC<HeroLeftProps> = ({ onScanThreat }) => {
             >
               <path
                 d="M3.5 3.5L10.5 21L14 14L21 10.5L3.5 3.5Z"
-                fill="#A068FF"
-                stroke="#060218"
+                fill="#2563eb"
+                stroke="#ffffff"
                 strokeWidth="1.5"
                 strokeLinejoin="round"
               />
@@ -79,10 +79,10 @@ export const HeroLeft: React.FC<HeroLeftProps> = ({ onScanThreat }) => {
 
           {/* Pill Badge */}
           <div
-            className="px-4 py-2 rounded-[20px] shadow-lg flex items-center justify-center"
+            className="px-4 py-2 rounded-[20px] shadow-md flex items-center justify-center"
             style={{
-              backgroundColor: '#A068FF',
-              boxShadow: '0 4px 14px rgba(160, 104, 255, 0.45)',
+              backgroundColor: '#2563eb',
+              boxShadow: '0 4px 14px rgba(37, 99, 235, 0.35)',
             }}
           >
             <span

@@ -48,8 +48,8 @@ const CYBER_NODES: CyberNodeConfig[] = [
     title: 'Neural NLP Core',
     subtitle: 'Semantic Coercion Scanner',
     badgeTag: 'NLP AI',
-    icon: <Brain className="w-6 h-6 text-[#A068FF]" />,
-    bgGradient: 'linear-gradient(135deg, #1b0c36 0%, #070319 100%)',
+    icon: <Brain className="w-6 h-6 text-indigo-600" />,
+    bgGradient: 'linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%)',
   },
 
   // Orbit 2 (diameter 501px, radius 250px, CW 40s)
@@ -65,8 +65,8 @@ const CYBER_NODES: CyberNodeConfig[] = [
     title: 'URL & Domain Sentinel',
     subtitle: 'Typosquat & TLD Risk',
     badgeTag: 'URL Guard',
-    icon: <Globe className="w-5 h-5 text-amber-400" />,
-    bgGradient: 'linear-gradient(135deg, #2a1b05 0%, #0c0802 100%)',
+    icon: <Globe className="w-5 h-5 text-amber-600" />,
+    bgGradient: 'linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%)',
   },
   {
     id: 'node-social-eng',
@@ -80,8 +80,8 @@ const CYBER_NODES: CyberNodeConfig[] = [
     title: 'Social Engineering Lures',
     subtitle: 'Urgency & Fear Profiling',
     badgeTag: 'Cognitive',
-    icon: <Flame className="w-7 h-7 text-rose-400" />,
-    bgGradient: 'linear-gradient(135deg, #360d1b 0%, #150308 100%)',
+    icon: <Flame className="w-7 h-7 text-rose-600" />,
+    bgGradient: 'linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%)',
   },
   {
     id: 'node-crypto-headers',
@@ -95,8 +95,8 @@ const CYBER_NODES: CyberNodeConfig[] = [
     title: 'Auth Headers Cryptography',
     subtitle: 'SPF / DKIM / DMARC',
     badgeTag: 'Headers',
-    icon: <Lock className="w-5 h-5 text-cyan-400" />,
-    bgGradient: 'linear-gradient(135deg, #07253b 0%, #03101c 100%)',
+    icon: <Lock className="w-5 h-5 text-blue-600" />,
+    bgGradient: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
   },
 
   // Orbit 3 (diameter 649px, radius 324px, CW 50s)
@@ -112,8 +112,8 @@ const CYBER_NODES: CyberNodeConfig[] = [
     title: 'MITRE ATT&CK Matrix',
     subtitle: 'Tactics & Techniques',
     badgeTag: 'MITRE',
-    icon: <Target className="w-7 h-7 text-pink-400" />,
-    bgGradient: 'linear-gradient(135deg, #380b2d 0%, #14030f 100%)',
+    icon: <Target className="w-7 h-7 text-rose-600" />,
+    bgGradient: 'linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%)',
   },
   {
     id: 'node-trust-graph-3',
@@ -127,8 +127,8 @@ const CYBER_NODES: CyberNodeConfig[] = [
     title: 'Trust Graph Relational Engine',
     subtitle: 'Identity Envelope Validation',
     badgeTag: 'Trust Map',
-    icon: <Network className="w-6 h-6 text-teal-300" />,
-    bgGradient: 'linear-gradient(135deg, #083434 0%, #021414 100%)',
+    icon: <Network className="w-6 h-6 text-teal-600" />,
+    bgGradient: 'linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%)',
   },
 
   // Orbit 4 (Outermost: diameter 797px, radius 398px, CCW 60s)
@@ -144,8 +144,8 @@ const CYBER_NODES: CyberNodeConfig[] = [
     title: 'Malware & Attachment Detonator',
     subtitle: 'Static & Dynamic Heuristics',
     badgeTag: 'Sandbox',
-    icon: <ShieldAlert className="w-5 h-5 text-purple-300" />,
-    bgGradient: 'linear-gradient(135deg, #240a3e 0%, #090214 100%)',
+    icon: <ShieldAlert className="w-5 h-5 text-indigo-600" />,
+    bgGradient: 'linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%)',
   },
   {
     id: 'node-soc-automation',
@@ -159,8 +159,8 @@ const CYBER_NODES: CyberNodeConfig[] = [
     title: 'SOC Autonomous Incident Response',
     subtitle: 'Zero-Hour Containment',
     badgeTag: 'SOC AI',
-    icon: <Terminal className="w-7 h-7 text-amber-300" />,
-    bgGradient: 'linear-gradient(135deg, #3d1c06 0%, #170a02 100%)',
+    icon: <Terminal className="w-7 h-7 text-amber-600" />,
+    bgGradient: 'linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%)',
   },
   {
     id: 'node-cognitive-dna',
@@ -174,8 +174,8 @@ const CYBER_NODES: CyberNodeConfig[] = [
     title: 'Attack DNA Profiler',
     subtitle: 'Technique Fingerprinting',
     badgeTag: 'Attack DNA',
-    icon: <Dna className="w-6 h-6 text-rose-300" />,
-    bgGradient: 'linear-gradient(135deg, #380b2d 0%, #14030f 100%)',
+    icon: <Dna className="w-6 h-6 text-rose-600" />,
+    bgGradient: 'linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%)',
   },
   {
     id: 'node-xai-inspector',
@@ -189,8 +189,8 @@ const CYBER_NODES: CyberNodeConfig[] = [
     title: 'Explainable AI Rationale',
     subtitle: 'Evidence Highlighting',
     badgeTag: 'XAI',
-    icon: <Sparkles className="w-5 h-5 text-cyan-300" />,
-    bgGradient: 'linear-gradient(135deg, #072e42 0%, #02121c 100%)',
+    icon: <Sparkles className="w-5 h-5 text-blue-600" />,
+    bgGradient: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
   },
 ];
 
@@ -313,11 +313,10 @@ export const CirclesVisualization: React.FC = () => {
                 }}
                 title={`${node.title}: ${node.subtitle}`}
               >
-                <div className="absolute inset-0 rounded-[inherit] bg-[radial-gradient(#A068FF_1px,transparent_1px)] [background-size:8px_8px] opacity-25 pointer-events-none" />
                 <div className="relative z-10 flex items-center justify-center pointer-events-none">
                   {node.icon}
                 </div>
-                <div className="absolute -bottom-2 z-20 px-1.5 py-0.5 rounded-full bg-slate-950/95 border border-slate-700 text-[8px] font-mono font-bold text-slate-200 shadow-md uppercase tracking-wider whitespace-nowrap pointer-events-none">
+                <div className="absolute -bottom-2 z-20 px-1.5 py-0.5 rounded-full bg-white border border-slate-200 text-[8px] font-mono font-bold text-slate-700 shadow-sm uppercase tracking-wider whitespace-nowrap pointer-events-none">
                   {node.badgeTag}
                 </div>
               </div>
@@ -349,11 +348,10 @@ export const CirclesVisualization: React.FC = () => {
                 }}
                 title={`${node.title}: ${node.subtitle}`}
               >
-                <div className="absolute inset-0 rounded-[inherit] bg-[radial-gradient(#A068FF_1px,transparent_1px)] [background-size:8px_8px] opacity-25 pointer-events-none" />
                 <div className="relative z-10 flex items-center justify-center pointer-events-none">
                   {node.icon}
                 </div>
-                <div className="absolute -bottom-2 z-20 px-1.5 py-0.5 rounded-full bg-slate-950/95 border border-slate-700 text-[8px] font-mono font-bold text-slate-200 shadow-md uppercase tracking-wider whitespace-nowrap pointer-events-none">
+                <div className="absolute -bottom-2 z-20 px-1.5 py-0.5 rounded-full bg-white border border-slate-200 text-[8px] font-mono font-bold text-slate-700 shadow-sm uppercase tracking-wider whitespace-nowrap pointer-events-none">
                   {node.badgeTag}
                 </div>
               </div>

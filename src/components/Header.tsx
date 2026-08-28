@@ -1,17 +1,22 @@
 import React from 'react';
 import { Shield, ArrowLeft, Terminal, Sparkles, Home, Layers } from 'lucide-react';
 
+import { FeatureTabType } from './FeaturesNavBar';
+
 interface HeaderProps {
   currentView?: 'home' | 'scanner';
-  onNavigate?: (view: 'home' | 'scanner', initialTab?: 'all' | 'explainable' | 'multilayer' | 'dna_chain' | 'trust_impact') => void;
+  onNavigate?: (view: 'home' | 'scanner', initialTab?: FeatureTabType) => void;
   onOpenPitch?: () => void;
 }
 
-const NAV_LINKS: { label: string; tab: 'all' | 'explainable' | 'multilayer' | 'dna_chain' | 'trust_impact' }[] = [
-  { label: 'NLP & Intent', tab: 'multilayer' },
-  { label: 'URL Analysis', tab: 'trust_impact' },
-  { label: 'Attack DNA', tab: 'dna_chain' },
+const NAV_LINKS: { label: string; tab: FeatureTabType }[] = [
+  { label: 'Scan Ingestion', tab: 'ingest' },
   { label: 'Explainable AI', tab: 'explainable' },
+  { label: '6-Layer Matrix', tab: 'matrix' },
+  { label: 'Attack DNA', tab: 'dna' },
+  { label: 'Trust Graph', tab: 'trust' },
+  { label: 'SOC Playbook', tab: 'remediation' },
+  { label: 'Executive Verdict', tab: 'overview' },
 ];
 
 export const Header: React.FC<HeaderProps> = ({

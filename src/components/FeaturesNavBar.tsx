@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   Layers, 
   Sparkles, 
@@ -10,18 +10,30 @@ import {
   RefreshCw, 
   ShieldAlert, 
   FileText, 
-  Compass, 
   Dna, 
   GitCommit, 
+  Shield, 
+  Radio, 
   Target, 
-  Send, 
-  SlidersHorizontal,
-  ChevronDown
+  AlertTriangle,
+  ChevronDown,
+  Terminal,
+  Activity,
+  Zap
 } from 'lucide-react';
 import { FullThreatAnalysisResult } from '../types';
 import { SAMPLE_THREATS } from '../data/sampleThreats';
 
-export type FeatureTabType = 'all' | 'explainable' | 'multilayer' | 'dna_chain' | 'trust_impact' | 'remediation';
+export type FeatureTabType = 
+  | 'overview' 
+  | 'ingest' 
+  | 'explainable' 
+  | 'matrix' 
+  | 'dna' 
+  | 'chain' 
+  | 'trust' 
+  | 'impact' 
+  | 'remediation';
 
 interface FeaturesNavBarProps {
   activeTab: FeatureTabType;
@@ -44,57 +56,72 @@ export const FeaturesNavBar: React.FC<FeaturesNavBarProps> = ({
   onReAnalyze,
   onNavigateHome
 }) => {
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
-
-  const featureItems: { id: FeatureTabType; label: string; shortLabel: string; icon: React.ReactNode; badge?: string }[] = [
+  const featureItems: { 
+    id: FeatureTabType; 
+    label: string; 
+    shortLabel: string; 
+    icon: React.ReactNode; 
+    badge?: string;
+  }[] = [
     { 
-      id: 'all', 
-      label: 'All Features Stream', 
-      shortLabel: 'All Features', 
-      icon: <Layers className="w-3.5 h-3.5" /> 
+      id: 'ingest', 
+      label: 'Scan Input / Ingestion', 
+      shortLabel: 'Input', 
+      icon: <Terminal className="w-3.5 h-3.5 text-blue-400" /> 
     },
     { 
       id: 'explainable', 
       label: 'Explainable AI Evidence', 
-      shortLabel: 'Evidence Inspector', 
+      shortLabel: 'Explainable AI', 
       icon: <Sparkles className="w-3.5 h-3.5 text-teal-400" />,
-      badge: analysis?.highlightedFlags ? `${analysis.highlightedFlags.length} Flags` : undefined
+      badge: analysis?.highlightedFlags ? `${analysis.highlightedFlags.length}` : undefined
     },
     { 
-      id: 'multilayer', 
+      id: 'matrix', 
       label: '6-Perspective Matrix', 
       shortLabel: '6-Layer Matrix', 
       icon: <Brain className="w-3.5 h-3.5 text-purple-400" />,
-      badge: '6 Layers'
+      badge: '6 L'
     },
     { 
-      id: 'dna_chain', 
-      label: 'Attack DNA & Cognitive Chain', 
-      shortLabel: 'DNA & Chain', 
-      icon: <Flame className="w-3.5 h-3.5 text-rose-400" />,
-      badge: analysis?.attackDNA ? `${analysis.attackDNA.length} Markers` : undefined
+      id: 'dna', 
+      label: 'Attack DNA & MITRE', 
+      shortLabel: 'Attack DNA', 
+      icon: <Dna className="w-3.5 h-3.5 text-rose-400" />,
+      badge: analysis?.attackDNA ? `${analysis.attackDNA.length}` : undefined
     },
     { 
-      id: 'trust_impact', 
-      label: 'Trust Graph & Breach Impact', 
-      shortLabel: 'Trust & Impact', 
-      icon: <Network className="w-3.5 h-3.5 text-cyan-400" />
+      id: 'chain', 
+      label: 'Manipulation Chain', 
+      shortLabel: 'Manipulation', 
+      icon: <GitCommit className="w-3.5 h-3.5 text-amber-400" /> 
+    },
+    { 
+      id: 'trust', 
+      label: 'Trust Graph', 
+      shortLabel: 'Trust Graph', 
+      icon: <Network className="w-3.5 h-3.5 text-cyan-400" /> 
+    },
+    { 
+      id: 'impact', 
+      label: 'Breach Impact', 
+      shortLabel: 'Impact Sim', 
+      icon: <Flame className="w-3.5 h-3.5 text-orange-400" /> 
     },
     { 
       id: 'remediation', 
-      label: 'SOC Playbook & Actions', 
-      shortLabel: 'Remediation', 
+      label: 'SOC Playbook', 
+      shortLabel: 'SOC Actions', 
       icon: <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />,
-      badge: analysis?.recommendations ? `${analysis.recommendations.length} Steps` : undefined
+      badge: analysis?.recommendations ? `${analysis.recommendations.length}` : undefined
+    },
+    { 
+      id: 'overview', 
+      label: 'Executive Verdict & Summary', 
+      shortLabel: 'Verdict', 
+      icon: <Shield className="w-3.5 h-3.5 text-[#A068FF]" /> 
     }
   ];
-
-  const scrollToSection = (sectionId: string) => {
-    const el = document.getElementById(sectionId);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
 
   const getThreatBadge = () => {
     if (!analysis) return null;
@@ -133,7 +160,7 @@ export const FeaturesNavBar: React.FC<FeaturesNavBarProps> = ({
         {/* Top Control Strip */}
         <div className="flex items-center justify-between gap-2 sm:gap-4 flex-wrap pb-1.5 border-b border-slate-800/80 px-1">
           
-          {/* Left: Back button & Breadcrumb / Status */}
+          {/* Left: Back to Landing button & Breadcrumb / Status */}
           <div className="flex items-center gap-2.5">
             <button
               onClick={onNavigateHome}
@@ -189,42 +216,30 @@ export const FeaturesNavBar: React.FC<FeaturesNavBarProps> = ({
           </div>
         </div>
 
-        {/* Feature Tabs & In-Page Section Anchors */}
-        <div className="flex items-center gap-1.5 overflow-x-auto p-0.5 no-scrollbar">
+        {/* Feature Navigation Bar (Buttons wrap naturally to new lines - No Horizontal Scrolling) */}
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 p-0.5">
           {featureItems.map((tab) => {
             const isActive = activeTab === tab.id;
             return (
               <button
                 key={tab.id}
-                id={`feature-tab-${tab.id}`}
+                id={`feature-page-tab-${tab.id}`}
                 onClick={() => {
                   setActiveTab(tab.id);
-                  if (tab.id === 'all') {
-                    scrollToSection('cybersentinel-overview-card');
-                  } else if (tab.id === 'explainable') {
-                    scrollToSection('cybersentinel-explainable-panel');
-                  } else if (tab.id === 'multilayer') {
-                    scrollToSection('cybersentinel-multilayer-panel');
-                  } else if (tab.id === 'dna_chain') {
-                    scrollToSection('cybersentinel-attack-dna-panel');
-                  } else if (tab.id === 'trust_impact') {
-                    scrollToSection('cybersentinel-trust-graph-panel');
-                  } else if (tab.id === 'remediation') {
-                    scrollToSection('cybersentinel-action-center');
-                  }
+                  window.location.hash = `scanner/${tab.id}`;
+                  window.scrollTo({ top: 0, behavior: 'instant' });
                 }}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap cursor-pointer shrink-0 ${
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap cursor-pointer ${
                   isActive
-                    ? 'bg-[#A068FF]/30 text-white border border-[#A068FF]/60 shadow-md shadow-[#A068FF]/10 ring-1 ring-[#A068FF]/30'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 border border-transparent'
+                    ? 'bg-[#A068FF] text-white border border-[#c4b5fd]/60 shadow-lg shadow-[#A068FF]/20 ring-1 ring-[#A068FF]'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800/80 border border-slate-800/80 bg-slate-950/60'
                 }`}
               >
                 {tab.icon}
-                <span className="hidden sm:inline">{tab.label}</span>
-                <span className="sm:hidden">{tab.shortLabel}</span>
+                <span>{tab.label}</span>
                 {tab.badge && (
                   <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full border ${
-                    isActive ? 'bg-[#A068FF]/40 text-purple-200 border-[#A068FF]/50' : 'bg-slate-800 text-slate-400 border-slate-700'
+                    isActive ? 'bg-white/20 text-white border-white/40 font-bold' : 'bg-slate-800 text-slate-400 border-slate-700'
                   }`}>
                     {tab.badge}
                   </span>

@@ -1,4 +1,4 @@
-﻿# 🛡️ CyberSentinel: AI-Based Phishing & Social Engineering Detector
+# 🛡️ CyberSentinel: AI-Based Phishing & Social Engineering Detector
 
 > **Challenge 8 Solution**: An AI-powered cybersecurity assistant that analyzes messages, emails, URLs, or webpage content and identifies potential phishing or social-engineering attempts with explainable AI.
 
@@ -37,21 +37,79 @@ Modern cyberattacks increasingly exploit human psychology (urgency, fear, author
 
 ---
 
+## 👥 3-Member Team Architecture & Workflow
+
+The codebase is split into three independent, modular domains:
+
+```text
+CyberSentinel/
+├── frontend/             👉 MEMBER 2: Frontend & UI/UX Engineer
+│   ├── src/
+│   │   ├── components/  # React components (Visualizations, Modals, Inputs)
+│   │   ├── data/        # Threat scenarios & presets
+│   │   ├── hooks/       # Custom React animation hooks
+│   │   └── types.ts     # Frontend UI state types
+│   ├── index.html       # Entry HTML & typography
+│   ├── vite.config.ts   # Vite dev server & proxy (/api -> localhost:5000)
+│   └── package.json     # Frontend dependencies (React 19, Tailwind, Motion)
+│
+├── backend/              👉 MEMBER 3: Backend & AI Engineer
+│   ├── src/
+│   │   ├── server.ts    # Express API server (/api/analyze, /api/health)
+│   │   └── types.ts     # Backend threat types & intelligence interfaces
+│   ├── tsconfig.json    # Backend TypeScript configuration
+│   ├── .env.example     # Environment template (GEMINI_API_KEY, PORT)
+│   └── package.json     # Backend dependencies (Express, @google/genai, CORS)
+│
+└── package.json          👉 MEMBER 1: Team Lead & Integration
+    ├── README.md        # Architecture & documentation
+    └── package.json     # Root workspace orchestrator (concurrent dev scripts)
+```
+
+---
+
+## 🛠️ Developer Commands for the Team
+
+### 🌟 Run Everything (Both Frontend + Backend)
+```bash
+npm install
+npm run dev
+```
+- **Frontend URL**: `http://localhost:3000`
+- **Backend API URL**: `http://localhost:5000`
+
+### 🎨 Member 2: Run Frontend Only
+```bash
+npm run dev:frontend
+```
+
+### 🧠 Member 3: Run Backend Only
+```bash
+npm run dev:backend
+```
+
+### 🏗️ Build All Modules for Production
+```bash
+npm run build
+```
+
+---
+
 ## 📦 Getting Started
 
 ### 1. Installation
-`ash
+` ash
 npm install
 `
 
 ### 2. Configure Environment (Optional)
-`ash
+` ash
 cp .env.example .env
 # Add your GEMINI_API_KEY in .env
 `
 
 ### 3. Run Development Server
-`ash
+` ash
 npm run dev
 `
 

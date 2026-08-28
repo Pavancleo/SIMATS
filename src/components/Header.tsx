@@ -20,7 +20,7 @@ export const Header: React.FC = () => {
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#A068FF] to-[#070319] flex items-center justify-center border border-[#A068FF]/50 shadow-md">
             <Shield className="w-4 h-4 text-white" />
           </div>
-          <span className="text-[#000000] font-bold text-[20px] tracking-tight font-['Urbanist']">
+          <span className="text-white font-bold text-[20px] tracking-tight font-['Urbanist']">
             CyberSentinel
           </span>
         </a>
@@ -30,7 +30,7 @@ export const Header: React.FC = () => {
             <a
               key={link.label}
               href={link.href}
-              className="nav-link text-[#000000] text-[15px] font-normal tracking-[-0.2px]"
+              className="nav-link text-slate-300 hover:text-white text-[15px] font-normal tracking-[-0.2px] transition-colors"
             >
               {link.label}
             </a>

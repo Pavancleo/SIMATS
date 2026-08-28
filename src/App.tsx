@@ -177,11 +177,13 @@ export default function App() {
             </div>
           </div>
 
-          {/* Main Two-Column Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* =============================================================
+              ROW 2: INGESTION PANEL & EXECUTIVE THREAT OVERVIEW (BALANCED GRID)
+              ============================================================= */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
             
-            {/* Left Column: Content Ingestion Panel */}
-            <div className="lg:col-span-5 space-y-6">
+            {/* Left Column: Suspicious Content Ingestion */}
+            <div className="lg:col-span-6 space-y-6">
               <InputPanel
                 input={input}
                 setInput={setInput}
@@ -209,12 +211,12 @@ export default function App() {
               )}
             </div>
 
-            {/* Right Column: AI Analysis & Multi-Layer Visualizations */}
-            <div className="lg:col-span-7 space-y-6">
+            {/* Right Column: AI Threat Overview & Executive Verdict */}
+            <div className="lg:col-span-6 space-y-6">
               
               {/* Loading State */}
               {isAnalyzing && (
-                <div className="bg-slate-900/90 border border-[#A068FF]/40 rounded-2xl p-12 shadow-2xl flex flex-col items-center justify-center text-center space-y-4 py-20 animate-pulse">
+                <div className="bg-slate-900/90 border border-[#A068FF]/40 rounded-2xl p-8 sm:p-12 shadow-2xl flex flex-col items-center justify-center text-center space-y-4 py-20 animate-pulse">
                   <div className="relative flex items-center justify-center w-16 h-16 rounded-full bg-[#A068FF]/20 border border-[#A068FF]/50">
                     <ShieldAlert className="w-8 h-8 text-[#A068FF] animate-bounce" />
                     <span className="absolute inset-0 rounded-full border-2 border-[#A068FF] border-t-transparent animate-spin" />
@@ -238,105 +240,133 @@ export default function App() {
                 </div>
               )}
 
-              {/* Real-time Analysis Results */}
+              {/* Real-time Analysis Overview Verdict */}
               {!isAnalyzing && analysis && (
-                <div className="space-y-6">
-                  
-                  {/* 1. Risk Assessment Scoring & Executive Verdict */}
-                  <AnalysisOverview
-                    analysis={analysis}
-                    onExportReport={() => {
-                      const reportEl = document.getElementById('cybersentinel-action-center');
-                      if (reportEl) reportEl.scrollIntoView({ behavior: 'smooth' });
-                    }}
-                  />
-
-                  {/* 2. Explainable AI Red-Flag Highlighting */}
-                  <ExplainableMessageViewer
-                    content={input.content}
-                    flags={analysis.highlightedFlags || []}
-                    whyDangerous={analysis.whyDangerousExplanation || []}
-                  />
-
-                  {/* View Tabs */}
-                  <div className="flex items-center gap-2 p-1.5 bg-slate-900 border border-slate-800 rounded-xl overflow-x-auto text-xs">
-                    <button
-                      onClick={() => setActiveTab('all')}
-                      className={`px-3 py-1.5 rounded-lg font-medium transition-all ${
-                        activeTab === 'all'
-                          ? 'bg-[#A068FF]/30 text-white border border-[#A068FF]/50'
-                          : 'text-slate-400 hover:text-slate-200'
-                      }`}
-                    >
-                      All Intelligence Layers
-                    </button>
-                    <button
-                      onClick={() => setActiveTab('multilayer')}
-                      className={`px-3 py-1.5 rounded-lg font-medium transition-all ${
-                        activeTab === 'multilayer'
-                          ? 'bg-[#A068FF]/30 text-white border border-[#A068FF]/50'
-                          : 'text-slate-400 hover:text-slate-200'
-                      }`}
-                    >
-                      6-Perspective Matrix
-                    </button>
-                    <button
-                      onClick={() => setActiveTab('dna_chain')}
-                      className={`px-3 py-1.5 rounded-lg font-medium transition-all ${
-                        activeTab === 'dna_chain'
-                          ? 'bg-[#A068FF]/30 text-white border border-[#A068FF]/50'
-                          : 'text-slate-400 hover:text-slate-200'
-                      }`}
-                    >
-                      Attack DNA & Manipulation Chain
-                    </button>
-                    <button
-                      onClick={() => setActiveTab('trust_impact')}
-                      className={`px-3 py-1.5 rounded-lg font-medium transition-all ${
-                        activeTab === 'trust_impact'
-                          ? 'bg-[#A068FF]/30 text-white border border-[#A068FF]/50'
-                          : 'text-slate-400 hover:text-slate-200'
-                      }`}
-                    >
-                      Trust Graph & Breach Simulation
-                    </button>
-                  </div>
-
-                  {/* 3. Multi-Layer Threat Intelligence (6 Perspectives) */}
-                  {(activeTab === 'all' || activeTab === 'multilayer') && (
-                    <MultiLayerAnalysisView analysis={analysis} />
-                  )}
-
-                  {/* 4. Attack DNA & 5. Psychological Manipulation Chain */}
-                  {(activeTab === 'all' || activeTab === 'dna_chain') && (
-                    <div className="space-y-6">
-                      <AttackDNAPanel techniques={analysis.attackDNA || []} />
-                      <ManipulationChainVisualizer steps={analysis.manipulationChain || []} />
-                    </div>
-                  )}
-
-                  {/* 6. Trust Graph & 7. Projected Impact Simulation */}
-                  {(activeTab === 'all' || activeTab === 'trust_impact') && (
-                    <div className="space-y-6">
-                      <TrustGraphVisualizer trustGraph={analysis.trustGraph} />
-                      <ProjectedImpactSimulator impact={analysis.projectedImpact} />
-                    </div>
-                  )}
-
-                  {/* 8. Recommendations & SOC Incident Response */}
-                  <div id="cybersentinel-action-center">
-                    <RecommendationsActionCenter
-                      recommendations={analysis.recommendations || []}
-                      analysis={analysis}
-                    />
-                  </div>
-
-                </div>
+                <AnalysisOverview
+                  analysis={analysis}
+                  onExportReport={() => {
+                    const reportEl = document.getElementById('cybersentinel-action-center');
+                    if (reportEl) reportEl.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                />
               )}
 
             </div>
 
           </div>
+
+          {/* =============================================================
+              ROW 3: DEEP MULTI-LAYER INTELLIGENCE & INVESTIGATION WORKSPACE
+              ============================================================= */}
+          {!isAnalyzing && analysis && (
+            <div className="space-y-8 pt-4">
+              
+              {/* Navigation View Filter Bar */}
+              <div className="flex items-center justify-between flex-wrap gap-3 p-2 bg-slate-900/90 border border-slate-800 rounded-2xl backdrop-blur-md sticky top-4 z-20 shadow-xl">
+                <div className="flex items-center gap-2 overflow-x-auto p-1 text-xs">
+                  <button
+                    onClick={() => setActiveTab('all')}
+                    className={`px-3.5 py-2 rounded-xl font-semibold transition-all flex items-center gap-2 ${
+                      activeTab === 'all'
+                        ? 'bg-[#A068FF]/30 text-white border border-[#A068FF]/50 shadow-md'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                    }`}
+                  >
+                    <Layers className="w-3.5 h-3.5" />
+                    <span>All Intelligence Layers</span>
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('explainable')}
+                    className={`px-3.5 py-2 rounded-xl font-semibold transition-all flex items-center gap-2 ${
+                      activeTab === 'explainable'
+                        ? 'bg-[#A068FF]/30 text-white border border-[#A068FF]/50 shadow-md'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                    }`}
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-teal-400" />
+                    <span>Explainable Evidence</span>
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('multilayer')}
+                    className={`px-3.5 py-2 rounded-xl font-semibold transition-all flex items-center gap-2 ${
+                      activeTab === 'multilayer'
+                        ? 'bg-[#A068FF]/30 text-white border border-[#A068FF]/50 shadow-md'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                    }`}
+                  >
+                    <Brain className="w-3.5 h-3.5 text-purple-400" />
+                    <span>6-Perspective Matrix</span>
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('dna_chain')}
+                    className={`px-3.5 py-2 rounded-xl font-semibold transition-all flex items-center gap-2 ${
+                      activeTab === 'dna_chain'
+                        ? 'bg-[#A068FF]/30 text-white border border-[#A068FF]/50 shadow-md'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                    }`}
+                  >
+                    <Flame className="w-3.5 h-3.5 text-rose-400" />
+                    <span>Attack DNA & Chain</span>
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('trust_impact')}
+                    className={`px-3.5 py-2 rounded-xl font-semibold transition-all flex items-center gap-2 ${
+                      activeTab === 'trust_impact'
+                        ? 'bg-[#A068FF]/30 text-white border border-[#A068FF]/50 shadow-md'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                    }`}
+                  >
+                    <Network className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Trust Graph & Impact</span>
+                  </button>
+                </div>
+
+                <div className="text-xs text-slate-400 font-mono hidden md:flex items-center gap-2 pr-3">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>Interactive Threat Layers</span>
+                </div>
+              </div>
+
+              {/* 2. Explainable AI Red-Flag Highlighting & Evidence Inspector */}
+              {(activeTab === 'all' || activeTab === 'explainable') && (
+                <ExplainableMessageViewer
+                  content={input.content}
+                  flags={analysis.highlightedFlags || []}
+                  whyDangerous={analysis.whyDangerousExplanation || []}
+                />
+              )}
+
+              {/* 3. Multi-Layer Threat Intelligence (6 Perspectives Matrix) */}
+              {(activeTab === 'all' || activeTab === 'multilayer') && (
+                <MultiLayerAnalysisView analysis={analysis} />
+              )}
+
+              {/* 4. Attack DNA & 5. Psychological Manipulation Chain */}
+              {(activeTab === 'all' || activeTab === 'dna_chain') && (
+                <div className="space-y-8">
+                  <AttackDNAPanel techniques={analysis.attackDNA || []} />
+                  <ManipulationChainVisualizer steps={analysis.manipulationChain || []} />
+                </div>
+              )}
+
+              {/* 6. Trust Graph & 7. Projected Impact Simulation */}
+              {(activeTab === 'all' || activeTab === 'trust_impact') && (
+                <div className="space-y-8">
+                  <TrustGraphVisualizer trustGraph={analysis.trustGraph} />
+                  <ProjectedImpactSimulator impact={analysis.projectedImpact} />
+                </div>
+              )}
+
+              {/* 8. Actionable Recommendations & SOC Incident Response */}
+              <div id="cybersentinel-action-center">
+                <RecommendationsActionCenter
+                  recommendations={analysis.recommendations || []}
+                  analysis={analysis}
+                />
+              </div>
+
+            </div>
+          )}
 
         </div>
       </section>

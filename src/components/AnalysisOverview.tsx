@@ -78,11 +78,14 @@ export const AnalysisOverview: React.FC<AnalysisOverviewProps> = ({
       </div>
 
       {/* Main Score Dials & Threat Verdict Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-5 items-center">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-5 items-stretch">
         
         {/* Left: Overall Threat Gauge */}
-        <div className="lg:col-span-4 flex flex-col items-center justify-center p-4 bg-slate-950/60 rounded-xl border border-slate-800/80">
-          <div className="relative flex items-center justify-center w-36 h-36">
+        <div className="flex flex-col items-center justify-between p-4 bg-slate-950/60 rounded-xl border border-slate-800/80 text-center">
+          <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">
+            Composite Threat Index
+          </div>
+          <div className="relative flex items-center justify-center w-32 h-32 my-auto">
             <svg className="w-full h-full transform -rotate-90" viewBox="0 0 120 120">
               <circle
                 cx="60"
@@ -116,8 +119,8 @@ export const AnalysisOverview: React.FC<AnalysisOverviewProps> = ({
             </div>
           </div>
 
-          <div className="mt-3 text-center">
-            <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${getThreatColor(analysis.overallRiskScore)}`}>
+          <div className="mt-2 w-full">
+            <div className={`inline-flex items-center justify-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border w-full ${getThreatColor(analysis.overallRiskScore)}`}>
               {analysis.overallRiskScore >= 60 ? (
                 <ShieldAlert className="w-3.5 h-3.5 shrink-0" />
               ) : (
@@ -125,33 +128,33 @@ export const AnalysisOverview: React.FC<AnalysisOverviewProps> = ({
               )}
               <span>{analysis.threatLevel}</span>
             </div>
-            <p className="text-[11px] text-slate-400 font-medium mt-1">
-              Overall Composite Threat Index
-            </p>
           </div>
         </div>
 
         {/* Middle: Dual Breakdown Dials (Human Manipulation vs Technical Threat) */}
-        <div className="lg:col-span-4 space-y-4">
-          
+        <div className="flex flex-col justify-between p-4 bg-slate-950/60 rounded-xl border border-slate-800/80 space-y-3">
+          <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+            Risk Vectors Breakdown
+          </div>
+
           {/* Human Manipulation Score */}
-          <div className="p-3.5 bg-slate-950/60 rounded-xl border border-slate-800/80">
+          <div className="p-3 bg-slate-900/60 rounded-lg border border-slate-800/80">
             <div className="flex items-center justify-between mb-1.5">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20">
-                  <Brain className="w-4 h-4" />
+                <div className="p-1 rounded-md bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                  <Brain className="w-3.5 h-3.5" />
                 </div>
                 <div>
-                  <div className="text-xs font-semibold text-slate-200">Human Manipulation Risk</div>
-                  <div className="text-[10px] text-slate-400">Psychological coercion & social engineering</div>
+                  <div className="text-xs font-semibold text-slate-200">Human Manipulation</div>
+                  <div className="text-[10px] text-slate-400">Psychological coercion</div>
                 </div>
               </div>
-              <span className="text-sm font-mono font-bold text-purple-400">
-                {analysis.humanManipulationRiskScore} / 100
+              <span className="text-xs font-mono font-bold text-purple-400">
+                {analysis.humanManipulationRiskScore}%
               </span>
             </div>
 
-            <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+            <div className="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-purple-500 to-rose-500 rounded-full transition-all duration-700"
                 style={{ width: `${analysis.humanManipulationRiskScore}%` }}
@@ -160,23 +163,23 @@ export const AnalysisOverview: React.FC<AnalysisOverviewProps> = ({
           </div>
 
           {/* Technical Threat Risk Score */}
-          <div className="p-3.5 bg-slate-950/60 rounded-xl border border-slate-800/80">
+          <div className="p-3 bg-slate-900/60 rounded-lg border border-slate-800/80">
             <div className="flex items-center justify-between mb-1.5">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-                  <Cpu className="w-4 h-4" />
+                <div className="p-1 rounded-md bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                  <Cpu className="w-3.5 h-3.5" />
                 </div>
                 <div>
-                  <div className="text-xs font-semibold text-slate-200">Technical Threat Vector</div>
-                  <div className="text-[10px] text-slate-400">URL spoofing, payload & auth headers</div>
+                  <div className="text-xs font-semibold text-slate-200">Technical Vector</div>
+                  <div className="text-[10px] text-slate-400">URL & auth headers</div>
                 </div>
               </div>
-              <span className="text-sm font-mono font-bold text-cyan-400">
-                {analysis.technicalThreatRiskScore} / 100
+              <span className="text-xs font-mono font-bold text-cyan-400">
+                {analysis.technicalThreatRiskScore}%
               </span>
             </div>
 
-            <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+            <div className="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-cyan-500 to-amber-500 rounded-full transition-all duration-700"
                 style={{ width: `${analysis.technicalThreatRiskScore}%` }}
@@ -184,21 +187,24 @@ export const AnalysisOverview: React.FC<AnalysisOverviewProps> = ({
             </div>
           </div>
 
+          <div className="text-[10px] font-mono text-slate-500 text-center">
+            Evaluated against 40+ heuristic algorithms
+          </div>
         </div>
 
         {/* Right: Executive Verdict & MITRE Mappings */}
-        <div className="lg:col-span-4 p-4 bg-slate-950/60 rounded-xl border border-slate-800/80 flex flex-col justify-between h-full">
+        <div className="p-4 bg-slate-950/60 rounded-xl border border-slate-800/80 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-2">
               <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
                 <Target className="w-3.5 h-3.5 text-rose-400" />
-                Executive AI Threat Verdict
+                Executive AI Verdict
               </span>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300">
                 {analysis.categoryName}
               </span>
             </div>
-            <p className="text-xs text-slate-300 leading-relaxed font-sans">
+            <p className="text-xs text-slate-300 leading-relaxed font-sans line-clamp-4">
               {analysis.executiveVerdict}
             </p>
           </div>

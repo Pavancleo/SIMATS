@@ -1,7 +1,11 @@
 import React from 'react';
 import { TypewriterHeading } from './TypewriterHeading';
 
-export const HeroLeft: React.FC = () => {
+interface HeroLeftProps {
+  onScanThreat?: () => void;
+}
+
+export const HeroLeft: React.FC<HeroLeftProps> = ({ onScanThreat }) => {
   return (
     <div
       id="hero-left-section"
@@ -22,11 +26,8 @@ export const HeroLeft: React.FC = () => {
           <button
             type="button"
             id="start-project-button"
-            onClick={() => {
-              const el = document.getElementById('cybersentinel-workspace');
-              if (el) el.scrollIntoView({ behavior: 'smooth' });
-            }}
-            className="btn-start-project cursor-pointer"
+            onClick={() => onScanThreat?.()}
+            className="btn-start-project cursor-pointer group"
           >
             <span className="relative z-10 text-[16px] font-medium text-white tracking-[-0.2px]">
               Scan Threat

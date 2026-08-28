@@ -61,7 +61,13 @@ html, body {
   opacity: 0;
   transform: translateY(-20px);
   animation: headerFadeDown 0.8s var(--ease-spring) forwards;
-  padding: 24px 64px;
+  padding: 16px 40px;
+}
+
+@media (max-width: 768px) {
+  .header-fade-down {
+    padding: 12px 20px;
+  }
 }
 
 .nav-link {
@@ -191,8 +197,8 @@ html, body {
 }
 
 .hero-heading {
-  font-size: 64px;
-  line-height: 64px;
+  font-size: clamp(36px, 4.2vw, 62px);
+  line-height: 1.08;
 }
 
 /* Typewriter Cursor */

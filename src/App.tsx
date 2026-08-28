@@ -11,6 +11,7 @@ import { ManipulationChainVisualizer } from './components/ManipulationChainVisua
 import { TrustGraphVisualizer } from './components/TrustGraphVisualizer';
 import { ProjectedImpactSimulator } from './components/ProjectedImpactSimulator';
 import { RecommendationsActionCenter } from './components/RecommendationsActionCenter';
+import { FeaturesNavBar, FeatureTabType } from './components/FeaturesNavBar';
 import { JudgePitchModal } from './components/JudgePitchModal';
 import { SAMPLE_THREATS, SampleThreatItem } from './data/sampleThreats';
 import { ThreatInput, FullThreatAnalysisResult } from './types';

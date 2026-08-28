@@ -26,7 +26,6 @@ interface CyberNodeConfig {
   sizePx: number;
   borderRadius: string;
   glowType: 'purple' | 'yellow' | 'pink' | 'blue' | 'orange';
-  flyInDelaySec: number;
   spinClass: string;
   title: string;
   subtitle: string;
@@ -36,16 +35,15 @@ interface CyberNodeConfig {
 }
 
 const CYBER_NODES: CyberNodeConfig[] = [
-  // Orbit 1 (Innermost: radius 177px, CCW 30s)
+  // Orbit 1 (Innermost: diameter 353px, radius 176px, CCW 30s)
   {
     id: 'node-nlp-core',
     orbitIndex: 1,
     angleDeg: 270,
-    radiusPx: 177,
+    radiusPx: 176,
     sizePx: 64,
     borderRadius: '18px',
     glowType: 'purple',
-    flyInDelaySec: 0.6,
     spinClass: 'spin-right-30',
     title: 'Neural NLP Core',
     subtitle: 'Semantic Coercion Scanner',
@@ -54,16 +52,15 @@ const CYBER_NODES: CyberNodeConfig[] = [
     bgGradient: 'linear-gradient(135deg, #1b0c36 0%, #070319 100%)',
   },
 
-  // Orbit 2 (radius 251px, CW 40s)
+  // Orbit 2 (diameter 501px, radius 250px, CW 40s)
   {
     id: 'node-url-sentinel',
     orbitIndex: 2,
-    angleDeg: 60,
-    radiusPx: 251,
+    angleDeg: 45,
+    radiusPx: 250,
     sizePx: 60,
     borderRadius: '50%',
     glowType: 'yellow',
-    flyInDelaySec: 0.8,
     spinClass: 'spin-left-40',
     title: 'URL & Domain Sentinel',
     subtitle: 'Typosquat & TLD Risk',
@@ -74,12 +71,11 @@ const CYBER_NODES: CyberNodeConfig[] = [
   {
     id: 'node-social-eng',
     orbitIndex: 2,
-    angleDeg: 180,
-    radiusPx: 251,
-    sizePx: 78,
-    borderRadius: '24px',
+    angleDeg: 165,
+    radiusPx: 250,
+    sizePx: 76,
+    borderRadius: '22px',
     glowType: 'pink',
-    flyInDelaySec: 1.0,
     spinClass: 'spin-left-40',
     title: 'Social Engineering Lures',
     subtitle: 'Urgency & Fear Profiling',
@@ -90,12 +86,11 @@ const CYBER_NODES: CyberNodeConfig[] = [
   {
     id: 'node-crypto-headers',
     orbitIndex: 2,
-    angleDeg: 300,
-    radiusPx: 251,
+    angleDeg: 285,
+    radiusPx: 250,
     sizePx: 60,
     borderRadius: '18px',
     glowType: 'blue',
-    flyInDelaySec: 1.2,
     spinClass: 'spin-left-40',
     title: 'Auth Headers Cryptography',
     subtitle: 'SPF / DKIM / DMARC',
@@ -104,16 +99,15 @@ const CYBER_NODES: CyberNodeConfig[] = [
     bgGradient: 'linear-gradient(135deg, #07253b 0%, #03101c 100%)',
   },
 
-  // Orbit 3 (radius 325px, CW 50s)
+  // Orbit 3 (diameter 649px, radius 324px, CW 50s)
   {
     id: 'node-mitre-matrix',
     orbitIndex: 3,
-    angleDeg: 130,
-    radiusPx: 325,
-    sizePx: 84,
-    borderRadius: '26px',
+    angleDeg: 135,
+    radiusPx: 324,
+    sizePx: 82,
+    borderRadius: '24px',
     glowType: 'pink',
-    flyInDelaySec: 1.4,
     spinClass: 'spin-left-50',
     title: 'MITRE ATT&CK Matrix',
     subtitle: 'Tactics & Techniques',
@@ -121,17 +115,31 @@ const CYBER_NODES: CyberNodeConfig[] = [
     icon: <Target className="w-7 h-7 text-pink-400" />,
     bgGradient: 'linear-gradient(135deg, #380b2d 0%, #14030f 100%)',
   },
+  {
+    id: 'node-trust-graph-3',
+    orbitIndex: 3,
+    angleDeg: 315,
+    radiusPx: 324,
+    sizePx: 76,
+    borderRadius: '22px',
+    glowType: 'blue',
+    spinClass: 'spin-left-50',
+    title: 'Trust Graph Relational Engine',
+    subtitle: 'Identity Envelope Validation',
+    badgeTag: 'Trust Map',
+    icon: <Network className="w-6 h-6 text-teal-300" />,
+    bgGradient: 'linear-gradient(135deg, #083434 0%, #021414 100%)',
+  },
 
-  // Orbit 4 (Outermost: radius 399px, CCW 60s)
+  // Orbit 4 (Outermost: diameter 797px, radius 398px, CCW 60s)
   {
     id: 'node-malware-sandbox',
     orbitIndex: 4,
     angleDeg: 30,
-    radiusPx: 399,
+    radiusPx: 398,
     sizePx: 62,
     borderRadius: '50%',
     glowType: 'purple',
-    flyInDelaySec: 1.6,
     spinClass: 'spin-right-60',
     title: 'Malware & Attachment Detonator',
     subtitle: 'Static & Dynamic Heuristics',
@@ -142,12 +150,11 @@ const CYBER_NODES: CyberNodeConfig[] = [
   {
     id: 'node-soc-automation',
     orbitIndex: 4,
-    angleDeg: 95,
-    radiusPx: 399,
-    sizePx: 82,
+    angleDeg: 120,
+    radiusPx: 398,
+    sizePx: 80,
     borderRadius: '24px',
     glowType: 'orange',
-    flyInDelaySec: 1.8,
     spinClass: 'spin-right-60',
     title: 'SOC Autonomous Incident Response',
     subtitle: 'Zero-Hour Containment',
@@ -156,30 +163,28 @@ const CYBER_NODES: CyberNodeConfig[] = [
     bgGradient: 'linear-gradient(135deg, #3d1c06 0%, #170a02 100%)',
   },
   {
-    id: 'node-trust-graph',
+    id: 'node-cognitive-dna',
     orbitIndex: 4,
-    angleDeg: 220,
-    radiusPx: 399,
-    sizePx: 82,
-    borderRadius: '24px',
+    angleDeg: 210,
+    radiusPx: 398,
+    sizePx: 78,
+    borderRadius: '22px',
     glowType: 'pink',
-    flyInDelaySec: 2.0,
     spinClass: 'spin-right-60',
-    title: 'Trust Graph Relational Engine',
-    subtitle: 'Identity Envelope Cross-Validation',
-    badgeTag: 'Trust Map',
-    icon: <Network className="w-7 h-7 text-teal-300" />,
-    bgGradient: 'linear-gradient(135deg, #083434 0%, #021414 100%)',
+    title: 'Attack DNA Profiler',
+    subtitle: 'Technique Fingerprinting',
+    badgeTag: 'Attack DNA',
+    icon: <Dna className="w-6 h-6 text-rose-300" />,
+    bgGradient: 'linear-gradient(135deg, #380b2d 0%, #14030f 100%)',
   },
   {
     id: 'node-xai-inspector',
     orbitIndex: 4,
-    angleDeg: 320,
-    radiusPx: 399,
+    angleDeg: 300,
+    radiusPx: 398,
     sizePx: 62,
     borderRadius: '50%',
     glowType: 'blue',
-    flyInDelaySec: 2.3,
     spinClass: 'spin-right-60',
     title: 'Explainable AI Rationale',
     subtitle: 'Evidence Highlighting',
@@ -204,7 +209,7 @@ export const CirclesVisualization: React.FC = () => {
   const [latency, setLatency] = useState<number>(14);
   const [signalBars, setSignalBars] = useState<number[]>([40, 65, 85, 55, 90, 75, 60, 95]);
 
-  // Continuously move from 1 to 100 and 100 to 1 with real-time telemetry
+  // Continuously move from 1 to 100 and 100 to 1 with 30% reduced speed (65ms loop)
   useEffect(() => {
     let current = 1;
     let direction: 'up' | 'down' = 'up';
@@ -214,34 +219,30 @@ export const CirclesVisualization: React.FC = () => {
       if (isPaused) return;
 
       if (direction === 'up') {
-        // Step up dynamically with varying jump speed
-        const step = Math.random() > 0.75 ? 3 : (Math.random() > 0.3 ? 2 : 1);
-        current += step;
+        current += 1;
 
         if (current >= 100) {
           current = 100;
           direction = 'down';
           setScanDirection('down');
           isPaused = true;
-          setTimeout(() => { isPaused = false; }, 300);
+          setTimeout(() => { isPaused = false; }, 400);
         }
       } else {
-        // Step down dynamically
-        const step = Math.random() > 0.75 ? 3 : (Math.random() > 0.3 ? 2 : 1);
-        current -= step;
+        current -= 1;
 
         if (current <= 1) {
           current = 1;
           direction = 'up';
           setScanDirection('up');
           isPaused = true;
-          setTimeout(() => { isPaused = false; }, 300);
+          setTimeout(() => { isPaused = false; }, 400);
         }
       }
 
       setPercentage(current);
-      setScanSpeed(Math.floor(3800 + (current * 42) + Math.random() * 80));
-      setLatency(Math.floor(8 + (current % 12) + Math.random() * 3));
+      setScanSpeed(Math.floor(3800 + (current * 42) + Math.random() * 60));
+      setLatency(Math.floor(8 + (current % 12) + Math.random() * 2));
       setSignalBars([
         Math.floor(25 + Math.random() * 70),
         Math.floor(40 + Math.random() * 58),
@@ -252,7 +253,7 @@ export const CirclesVisualization: React.FC = () => {
         Math.floor(45 + Math.random() * 50),
         Math.floor(75 + Math.random() * 24),
       ]);
-    }, 45); // Active 45ms loop for fast, visible 1->100 & 100->1 cycle
+    }, 65); // 65ms: exactly 30% reduced speed from 45ms
 
     return () => clearInterval(interval);
   }, []);
@@ -266,7 +267,7 @@ export const CirclesVisualization: React.FC = () => {
         id="circles-container"
         className="circles-viewport relative flex items-center justify-center"
       >
-        {/* Orbit 4 (Outermost: 797px diameter, CCW 60s) */}
+        {/* Orbit 4 (Outermost: 797px diameter, radius 398px, CCW 60s) */}
         <div
           className="orbit orbit-4 spin-left-60"
           style={{ width: '797px', height: '797px' }}
@@ -275,32 +276,31 @@ export const CirclesVisualization: React.FC = () => {
           {CYBER_NODES.filter((a) => a.orbitIndex === 4).map((node) => (
             <div
               key={node.id}
-              className="avatar-positioner"
+              className="orbit-node-anchor"
               style={{
-                transform: `translate(-50%, -50%) rotate(${node.angleDeg}deg) translate(${node.radiusPx}px) rotate(-${node.angleDeg}deg)`,
+                transform: `rotate(${node.angleDeg}deg) translate(${node.radiusPx}px) rotate(-${node.angleDeg}deg)`,
               }}
             >
               <div
-                className={`avatar-fly-in ${node.spinClass} ${GLOW_CLASSES[node.glowType]} relative flex flex-col items-center justify-center shadow-2xl group cursor-pointer`}
+                className={`cyber-node-card ${node.spinClass} ${GLOW_CLASSES[node.glowType]} shadow-2xl group`}
                 style={{
                   width: `${node.sizePx}px`,
                   height: `${node.sizePx}px`,
                   borderRadius: node.borderRadius,
-                  animationDelay: `${node.flyInDelaySec}s`,
                   background: node.bgGradient,
                 }}
                 title={`${node.title}: ${node.subtitle}`}
               >
                 {/* Circuit Grid Subtle Texture */}
-                <div className="absolute inset-0 rounded-[inherit] bg-[radial-gradient(#A068FF_1px,transparent_1px)] [background-size:8px_8px] opacity-25" />
+                <div className="absolute inset-0 rounded-[inherit] bg-[radial-gradient(#A068FF_1px,transparent_1px)] [background-size:8px_8px] opacity-25 pointer-events-none" />
                 
                 {/* Cyber Icon */}
-                <div className="relative z-10 flex items-center justify-center">
+                <div className="relative z-10 flex items-center justify-center pointer-events-none">
                   {node.icon}
                 </div>
 
                 {/* Badge Tag */}
-                <div className="absolute -bottom-2 z-20 px-1.5 py-0.2 rounded-full bg-slate-950 border border-slate-700 text-[8px] font-mono font-bold text-slate-200 shadow-md uppercase tracking-wider">
+                <div className="absolute -bottom-2 z-20 px-1.5 py-0.5 rounded-full bg-slate-950/95 border border-slate-700 text-[8px] font-mono font-bold text-slate-200 shadow-md uppercase tracking-wider whitespace-nowrap pointer-events-none">
                   {node.badgeTag}
                 </div>
               </div>
@@ -308,7 +308,7 @@ export const CirclesVisualization: React.FC = () => {
           ))}
         </div>
 
-        {/* Orbit 3 (649px diameter, CW 50s) */}
+        {/* Orbit 3 (649px diameter, radius 324px, CW 50s) */}
         <div
           className="orbit orbit-3 spin-right-50"
           style={{ width: '649px', height: '649px' }}
@@ -317,27 +317,26 @@ export const CirclesVisualization: React.FC = () => {
           {CYBER_NODES.filter((a) => a.orbitIndex === 3).map((node) => (
             <div
               key={node.id}
-              className="avatar-positioner"
+              className="orbit-node-anchor"
               style={{
-                transform: `translate(-50%, -50%) rotate(${node.angleDeg}deg) translate(${node.radiusPx}px) rotate(-${node.angleDeg}deg)`,
+                transform: `rotate(${node.angleDeg}deg) translate(${node.radiusPx}px) rotate(-${node.angleDeg}deg)`,
               }}
             >
               <div
-                className={`avatar-fly-in ${node.spinClass} ${GLOW_CLASSES[node.glowType]} relative flex flex-col items-center justify-center shadow-2xl group cursor-pointer`}
+                className={`cyber-node-card ${node.spinClass} ${GLOW_CLASSES[node.glowType]} shadow-2xl group`}
                 style={{
                   width: `${node.sizePx}px`,
                   height: `${node.sizePx}px`,
                   borderRadius: node.borderRadius,
-                  animationDelay: `${node.flyInDelaySec}s`,
                   background: node.bgGradient,
                 }}
                 title={`${node.title}: ${node.subtitle}`}
               >
-                <div className="absolute inset-0 rounded-[inherit] bg-[radial-gradient(#A068FF_1px,transparent_1px)] [background-size:8px_8px] opacity-25" />
-                <div className="relative z-10 flex items-center justify-center">
+                <div className="absolute inset-0 rounded-[inherit] bg-[radial-gradient(#A068FF_1px,transparent_1px)] [background-size:8px_8px] opacity-25 pointer-events-none" />
+                <div className="relative z-10 flex items-center justify-center pointer-events-none">
                   {node.icon}
                 </div>
-                <div className="absolute -bottom-2 z-20 px-1.5 py-0.2 rounded-full bg-slate-950 border border-slate-700 text-[8px] font-mono font-bold text-slate-200 shadow-md uppercase tracking-wider">
+                <div className="absolute -bottom-2 z-20 px-1.5 py-0.5 rounded-full bg-slate-950/95 border border-slate-700 text-[8px] font-mono font-bold text-slate-200 shadow-md uppercase tracking-wider whitespace-nowrap pointer-events-none">
                   {node.badgeTag}
                 </div>
               </div>
@@ -345,7 +344,7 @@ export const CirclesVisualization: React.FC = () => {
           ))}
         </div>
 
-        {/* Orbit 2 (501px diameter, CW 40s) */}
+        {/* Orbit 2 (501px diameter, radius 250px, CW 40s) */}
         <div
           className="orbit orbit-2 spin-right-40"
           style={{ width: '501px', height: '501px' }}
@@ -354,27 +353,26 @@ export const CirclesVisualization: React.FC = () => {
           {CYBER_NODES.filter((a) => a.orbitIndex === 2).map((node) => (
             <div
               key={node.id}
-              className="avatar-positioner"
+              className="orbit-node-anchor"
               style={{
-                transform: `translate(-50%, -50%) rotate(${node.angleDeg}deg) translate(${node.radiusPx}px) rotate(-${node.angleDeg}deg)`,
+                transform: `rotate(${node.angleDeg}deg) translate(${node.radiusPx}px) rotate(-${node.angleDeg}deg)`,
               }}
             >
               <div
-                className={`avatar-fly-in ${node.spinClass} ${GLOW_CLASSES[node.glowType]} relative flex flex-col items-center justify-center shadow-2xl group cursor-pointer`}
+                className={`cyber-node-card ${node.spinClass} ${GLOW_CLASSES[node.glowType]} shadow-2xl group`}
                 style={{
                   width: `${node.sizePx}px`,
                   height: `${node.sizePx}px`,
                   borderRadius: node.borderRadius,
-                  animationDelay: `${node.flyInDelaySec}s`,
                   background: node.bgGradient,
                 }}
                 title={`${node.title}: ${node.subtitle}`}
               >
-                <div className="absolute inset-0 rounded-[inherit] bg-[radial-gradient(#A068FF_1px,transparent_1px)] [background-size:8px_8px] opacity-25" />
-                <div className="relative z-10 flex items-center justify-center">
+                <div className="absolute inset-0 rounded-[inherit] bg-[radial-gradient(#A068FF_1px,transparent_1px)] [background-size:8px_8px] opacity-25 pointer-events-none" />
+                <div className="relative z-10 flex items-center justify-center pointer-events-none">
                   {node.icon}
                 </div>
-                <div className="absolute -bottom-2 z-20 px-1.5 py-0.2 rounded-full bg-slate-950 border border-slate-700 text-[8px] font-mono font-bold text-slate-200 shadow-md uppercase tracking-wider">
+                <div className="absolute -bottom-2 z-20 px-1.5 py-0.5 rounded-full bg-slate-950/95 border border-slate-700 text-[8px] font-mono font-bold text-slate-200 shadow-md uppercase tracking-wider whitespace-nowrap pointer-events-none">
                   {node.badgeTag}
                 </div>
               </div>
@@ -382,7 +380,7 @@ export const CirclesVisualization: React.FC = () => {
           ))}
         </div>
 
-        {/* Orbit 1 (Innermost: 353px diameter, CCW 30s) */}
+        {/* Orbit 1 (Innermost: 353px diameter, radius 176px, CCW 30s) */}
         <div
           className="orbit orbit-1 spin-left-30"
           style={{ width: '353px', height: '353px' }}
@@ -391,27 +389,26 @@ export const CirclesVisualization: React.FC = () => {
           {CYBER_NODES.filter((a) => a.orbitIndex === 1).map((node) => (
             <div
               key={node.id}
-              className="avatar-positioner"
+              className="orbit-node-anchor"
               style={{
-                transform: `translate(-50%, -50%) rotate(${node.angleDeg}deg) translate(${node.radiusPx}px) rotate(-${node.angleDeg}deg)`,
+                transform: `rotate(${node.angleDeg}deg) translate(${node.radiusPx}px) rotate(-${node.angleDeg}deg)`,
               }}
             >
               <div
-                className={`avatar-fly-in ${node.spinClass} ${GLOW_CLASSES[node.glowType]} relative flex flex-col items-center justify-center shadow-2xl group cursor-pointer`}
+                className={`cyber-node-card ${node.spinClass} ${GLOW_CLASSES[node.glowType]} shadow-2xl group`}
                 style={{
                   width: `${node.sizePx}px`,
                   height: `${node.sizePx}px`,
                   borderRadius: node.borderRadius,
-                  animationDelay: `${node.flyInDelaySec}s`,
                   background: node.bgGradient,
                 }}
                 title={`${node.title}: ${node.subtitle}`}
               >
-                <div className="absolute inset-0 rounded-[inherit] bg-[radial-gradient(#A068FF_1px,transparent_1px)] [background-size:8px_8px] opacity-25" />
-                <div className="relative z-10 flex items-center justify-center">
+                <div className="absolute inset-0 rounded-[inherit] bg-[radial-gradient(#A068FF_1px,transparent_1px)] [background-size:8px_8px] opacity-25 pointer-events-none" />
+                <div className="relative z-10 flex items-center justify-center pointer-events-none">
                   {node.icon}
                 </div>
-                <div className="absolute -bottom-2 z-20 px-1.5 py-0.2 rounded-full bg-slate-950 border border-slate-700 text-[8px] font-mono font-bold text-slate-200 shadow-md uppercase tracking-wider">
+                <div className="absolute -bottom-2 z-20 px-1.5 py-0.5 rounded-full bg-slate-950/95 border border-slate-700 text-[8px] font-mono font-bold text-slate-200 shadow-md uppercase tracking-wider whitespace-nowrap pointer-events-none">
                   {node.badgeTag}
                 </div>
               </div>

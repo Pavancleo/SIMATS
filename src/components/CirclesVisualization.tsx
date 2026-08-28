@@ -203,61 +203,6 @@ const GLOW_CLASSES: Record<CyberNodeConfig['glowType'], string> = {
 };
 
 export const CirclesVisualization: React.FC = () => {
-  const [percentage, setPercentage] = useState<number>(1);
-  const [scanDirection, setScanDirection] = useState<'up' | 'down'>('up');
-  const [scanSpeed, setScanSpeed] = useState<number>(4820);
-  const [latency, setLatency] = useState<number>(14);
-  const [signalBars, setSignalBars] = useState<number[]>([40, 65, 85, 55, 90, 75, 60, 95]);
-
-  // Continuously move from 1 to 100 and 100 to 1 with 30% reduced speed (65ms loop)
-  useEffect(() => {
-    let current = 1;
-    let direction: 'up' | 'down' = 'up';
-    let isPaused = false;
-
-    const interval = setInterval(() => {
-      if (isPaused) return;
-
-      if (direction === 'up') {
-        current += 1;
-
-        if (current >= 100) {
-          current = 100;
-          direction = 'down';
-          setScanDirection('down');
-          isPaused = true;
-          setTimeout(() => { isPaused = false; }, 400);
-        }
-      } else {
-        current -= 1;
-
-        if (current <= 1) {
-          current = 1;
-          direction = 'up';
-          setScanDirection('up');
-          isPaused = true;
-          setTimeout(() => { isPaused = false; }, 400);
-        }
-      }
-
-      setPercentage(current);
-      setScanSpeed(Math.floor(3800 + (current * 42) + Math.random() * 60));
-      setLatency(Math.floor(8 + (current % 12) + Math.random() * 2));
-      setSignalBars([
-        Math.floor(25 + Math.random() * 70),
-        Math.floor(40 + Math.random() * 58),
-        Math.floor(30 + Math.random() * 65),
-        Math.floor(55 + Math.random() * 42),
-        Math.floor(35 + Math.random() * 60),
-        Math.floor(65 + Math.random() * 32),
-        Math.floor(45 + Math.random() * 50),
-        Math.floor(75 + Math.random() * 24),
-      ]);
-    }, 65); // 65ms: exactly 30% reduced speed from 45ms
-
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <div
       id="hero-circles-wrapper"
@@ -416,55 +361,37 @@ export const CirclesVisualization: React.FC = () => {
           ))}
         </div>
 
-        {/* Center Content: Dynamic Real-time Fluctuating Telemetry (1-100 & 100-1) */}
+        {/* Center Content: Uiverse Gooey Liquid Orbital Pulse */}
         <div
           id="center-specialists-stat"
           className="absolute inset-0 m-auto z-30 flex flex-col items-center justify-center pointer-events-none"
-          style={{ width: '250px', height: '250px' }}
+          style={{ width: '220px', height: '220px' }}
         >
-          <div className="flex flex-col items-center text-center space-y-1.5 p-3.5 rounded-full bg-[#060218]/90 backdrop-blur-md border border-[#A068FF]/40 shadow-2xl shadow-purple-950/60">
-            {/* Live Telemetry Beacon */}
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-950/90 border border-emerald-500/50 text-[10px] font-mono text-emerald-300 shadow-md">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-              <span className="tracking-wider uppercase font-bold">
-                {scanDirection === 'up' ? '▲ Threat Scanning (1→100%)' : '▼ Calibrating (100→1%)'}
-              </span>
-            </div>
-
-            {/* Dynamic Fluctuating Percentage (1 - 100 & 100 - 1) */}
-            <div className="flex items-baseline justify-center">
-              <span
-                className="text-white text-[50px] sm:text-[58px] font-black leading-none tracking-tight font-mono drop-shadow-[0_0_25px_rgba(160,104,255,0.85)] tabular-nums"
-                style={{ fontFamily: "'Urbanist', sans-serif" }}
-              >
-                {percentage}
-              </span>
-              <span className="text-[#A068FF] text-[28px] font-bold font-mono ml-0.5">%</span>
-            </div>
-
-            {/* Live Telemetry Equalizer Bars */}
-            <div className="flex items-end gap-1 h-3 px-2">
-              {signalBars.map((bar, idx) => (
-                <div
-                  key={idx}
-                  className="w-1 rounded-full bg-gradient-to-t from-cyan-500 via-emerald-400 to-[#A068FF] transition-all duration-75"
-                  style={{ height: `${bar}%` }}
-                />
-              ))}
-            </div>
-
-            {/* Subtitle */}
-            <div className="space-y-0.5">
-              <div className="text-cyan-300 text-[12px] font-extrabold tracking-[0.5px] uppercase font-mono">
-                Live AI Threat Index
-              </div>
-              <div className="text-[10px] text-slate-400 font-mono flex items-center justify-center gap-2">
-                <span>{scanSpeed} msg/s</span>
-                <span>•</span>
-                <span className="text-emerald-400">{latency}ms latency</span>
-              </div>
-            </div>
+          {/* From Uiverse.io by prikshit_1236 */}
+          <div className="pb-ball pb-ball-1">
+            <div className="pb-ball pb-ball-2" />
+            <div className="pb-ball pb-ball-3" />
           </div>
+
+          {/* SVG Gooey Liquid Filter */}
+          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style={{ display: 'none' }}>
+            <defs>
+              <filter id="gooey-liquid">
+                <feGaussianBlur
+                  in="SourceGraphic"
+                  stdDeviation="10"
+                  result="blur"
+                />
+                <feColorMatrix
+                  in="blur"
+                  mode="matrix"
+                  values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 25 -10"
+                  result="goo"
+                />
+                <feBlend in="SourceGraphic" in2="goo" />
+              </filter>
+            </defs>
+          </svg>
         </div>
       </div>
     </div>

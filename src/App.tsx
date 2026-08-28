@@ -138,40 +138,40 @@ export default function App() {
         <div className="max-w-7xl mx-auto space-y-8">
           
           {/* Problem Statement Mission Bar */}
-          <div className="bg-gradient-to-r from-slate-900 via-slate-900/95 to-[#060218] border border-[#A068FF]/30 rounded-2xl p-5 sm:p-7 shadow-2xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-96 h-96 bg-[#A068FF]/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
-            
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 relative z-10">
-              <div className="space-y-2.5 max-w-3xl">
-                <div className="flex items-center gap-2">
-                  <span className="px-3 py-1 text-xs font-mono font-bold rounded-full bg-[#A068FF]/20 text-[#A068FF] border border-[#A068FF]/40">
-                    Challenge 8: CyberSentinel
-                  </span>
-                  <span className="text-xs text-slate-400 font-mono">
-                    AI-Based Phishing & Social Engineering Detector
-                  </span>
+          <div className="container">
+            <div className="card p-5 sm:p-7 shadow-2xl relative overflow-hidden">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 relative z-10">
+                <div className="space-y-2 max-w-3xl">
+                  <div className="flex items-center gap-2">
+                    <span className="px-3 py-1 text-xs font-mono font-bold rounded-full bg-[#A068FF]/20 text-[#A068FF] border border-[#A068FF]/40">
+                      Challenge 8: CyberSentinel
+                    </span>
+                    <span className="text-xs text-slate-400 font-mono">
+                      AI-Based Phishing & Social Engineering Detector
+                    </span>
+                  </div>
+                  <h2 className="innerText text-xl sm:text-2xl font-bold tracking-tight">
+                    Multi-Perspective Threat Intelligence & Explainable AI Engine
+                  </h2>
+                  <p className="desc text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    Evaluates linguistic patterns, emotional coercion (<strong className="text-amber-300">urgency</strong>, <strong className="text-rose-300">fear</strong>, <strong className="text-purple-300">authority</strong>), deceptive links, sender discrepancies, and contextual indicators to produce an explainable risk assessment and mitigation playbook.
+                  </p>
                 </div>
-                <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white font-['Urbanist']">
-                  Multi-Perspective Threat Intelligence & Explainable AI Engine
-                </h2>
-                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                  Evaluates linguistic patterns, emotional coercion (<strong className="text-amber-300">urgency</strong>, <strong className="text-rose-300">fear</strong>, <strong className="text-purple-300">authority</strong>), deceptive links, sender discrepancies, and contextual indicators to produce an explainable risk assessment and mitigation playbook.
-                </p>
-              </div>
 
-              {/* Technologies Highlights */}
-              <div className="flex flex-wrap lg:flex-col gap-2 shrink-0">
-                <div className="flex items-center gap-2 p-2 rounded-lg bg-slate-950/80 border border-slate-800 text-xs text-slate-300">
-                  <Brain className="w-4 h-4 text-[#A068FF]" />
-                  <span>NLP & Cognitive Bias Detection</span>
-                </div>
-                <div className="flex items-center gap-2 p-2 rounded-lg bg-slate-950/80 border border-slate-800 text-xs text-slate-300">
-                  <Network className="w-4 h-4 text-cyan-400" />
-                  <span>Trust Graph & Domain Validation</span>
-                </div>
-                <div className="flex items-center gap-2 p-2 rounded-lg bg-slate-950/80 border border-slate-800 text-xs text-slate-300">
-                  <Sparkles className="w-4 h-4 text-emerald-400" />
-                  <span>Explainable AI Annotations</span>
+                {/* Technologies Highlights */}
+                <div className="flex flex-wrap lg:flex-col gap-2 shrink-0">
+                  <div className="flex items-center gap-2 p-2 rounded-lg bg-slate-950/80 border border-slate-800 text-xs text-slate-300">
+                    <Brain className="w-4 h-4 text-[#A068FF]" />
+                    <span>NLP & Cognitive Bias Detection</span>
+                  </div>
+                  <div className="flex items-center gap-2 p-2 rounded-lg bg-slate-950/80 border border-slate-800 text-xs text-slate-300">
+                    <Network className="w-4 h-4 text-cyan-400" />
+                    <span>Trust Graph & Domain Validation</span>
+                  </div>
+                  <div className="flex items-center gap-2 p-2 rounded-lg bg-slate-950/80 border border-slate-800 text-xs text-slate-300">
+                    <Sparkles className="w-4 h-4 text-emerald-400" />
+                    <span>Explainable AI Annotations</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -194,19 +194,21 @@ export default function App() {
 
               {/* Active Scenario Card */}
               {selectedSample && (
-                <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 text-xs text-slate-400 space-y-2 shadow-lg">
-                  <div className="flex items-center justify-between text-slate-300 font-medium">
-                    <span className="font-semibold text-slate-200">Loaded Threat Scenario:</span>
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                      selectedSample.threatLevelExpected === 'Critical' ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' :
-                      selectedSample.threatLevelExpected === 'High' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' :
-                      'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                    }`}>
-                      {selectedSample.badge}
-                    </span>
+                <div className="container">
+                  <div className="card p-4 text-xs text-slate-400 space-y-2 shadow-lg">
+                    <div className="flex items-center justify-between text-slate-300 font-medium">
+                      <span className="font-semibold text-slate-200">Loaded Threat Scenario:</span>
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                        selectedSample.threatLevelExpected === 'Critical' ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' :
+                        selectedSample.threatLevelExpected === 'High' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' :
+                        'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                      }`}>
+                        {selectedSample.badge}
+                      </span>
+                    </div>
+                    <p className="innerText text-base font-semibold">{selectedSample.name}</p>
+                    <p className="desc text-[11px] leading-relaxed">{selectedSample.description}</p>
                   </div>
-                  <p className="text-slate-200 font-semibold text-sm">{selectedSample.name}</p>
-                  <p className="text-[11px] text-slate-400 leading-relaxed">{selectedSample.description}</p>
                 </div>
               )}
             </div>

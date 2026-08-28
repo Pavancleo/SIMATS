@@ -21,20 +21,21 @@ export const MultiLayerAnalysisView: React.FC<MultiLayerAnalysisViewProps> = ({
   ];
 
   return (
-    <div id="cybersentinel-multilayer-panel" className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-xl">
-      
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-800">
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-purple-400" />
-          <h3 className="text-sm font-semibold text-slate-200 uppercase tracking-wide">
-            3. Multi-Layer Intelligence Analysis
-          </h3>
+    <div className="container">
+      <div id="cybersentinel-multilayer-panel" className="card p-5 sm:p-6 shadow-xl relative overflow-hidden">
+        
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-800 relative z-10">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-purple-400" />
+            <h3 className="innerText text-sm font-semibold uppercase tracking-wide">
+              3. Multi-Layer Intelligence Analysis
+            </h3>
+          </div>
+          <span className="desc text-xs">
+            6 Independent Deep Threat Evaluation Perspectives
+          </span>
         </div>
-        <span className="text-xs text-slate-400">
-          6 Independent Deep Threat Evaluation Perspectives
-        </span>
-      </div>
 
       {/* Layer Navigation Tabs */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 mb-5">
@@ -439,7 +440,7 @@ export const MultiLayerAnalysisView: React.FC<MultiLayerAnalysisViewProps> = ({
         )}
 
       </div>
-
+    </div>
     </div>
   );
 };

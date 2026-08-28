@@ -54,8 +54,8 @@ export const TypewriterHeading: React.FC<TypewriterHeadingProps> = ({
         letterSpacing: '-1.5px',
       }}
     >
-      <span className="text-[#000000]">{blackPart}</span>
-      {whitePart && <span className="text-[#ffffff]">{whitePart}</span>}
+      <span className="text-white">{blackPart}</span>
+      {whitePart && <span className="text-[#A068FF] font-bold">{whitePart}</span>}
       <span
         className={`inline-block ml-1 font-normal select-none ${
           isDone ? 'cursor-blink' : 'cursor-typing'

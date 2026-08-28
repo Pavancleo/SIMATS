@@ -44,11 +44,15 @@ html, body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: #0a0a0a;
-  background-image: url('https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260624_111401_56af5012-2263-45d3-849a-8688084d7c2a.png&w=1280&q=85');
-  background-position: center center;
-  background-size: cover;
-  background-repeat: no-repeat;
+  background-color: #060218;
+  background-image: 
+    radial-gradient(circle at 50% 18%, rgba(160, 104, 255, 0.18) 0%, transparent 55%),
+    radial-gradient(circle at 85% 35%, rgba(6, 182, 212, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 15% 50%, rgba(16, 185, 129, 0.10) 0%, transparent 45%),
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 48px 48px, 48px 48px;
+  background-position: center top, center top, center top, center center, center center;
   overflow-x: hidden;
 }
 

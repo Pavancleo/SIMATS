@@ -6,40 +6,40 @@ export interface SampleThreatItem {
   category: string;
   description: string;
   badge: string;
-  threatLevelExpected: 'Critical' | 'High' | 'Suspicious' | 'Safe';
+  threatLevelExpected: 'Critical' | 'High' | 'Suspicious' | 'Moderate' | 'Low' | 'Benign' | 'Safe';
   input: ThreatInput;
 }
 
 export const SAMPLE_THREATS: SampleThreatItem[] = [
   {
-    id: 'm365-urgent-2fa',
-    name: 'Microsoft 365 Security Alert (Credential Harvester)',
-    category: 'Credential Phishing',
-    badge: 'High Frequency Attack',
+    id: 'mode-1-critical',
+    name: 'Mode 1: Microsoft 365 2FA Account Lockout (Critical — 94%)',
+    category: 'Credential Phishing & SSO Theft',
+    badge: 'Critical (94%)',
     threatLevelExpected: 'Critical',
-    description: 'Impersonates IT Security demanding immediate 2FA re-authentication within 15 minutes before account termination.',
+    description: 'Deceptive high-urgency alert demanding immediate 2FA re-verification on typosquatted portal within 15 minutes before account suspension.',
     input: {
       type: 'email',
-      senderName: 'Microsoft Security Desk',
-      senderEmailOrPhone: 'notifications@sec-microsoft-verify-auth.xyz',
-      subject: 'URGENT: Suspicious Login Detected - Action Required in 15 Minutes',
+      senderName: 'Microsoft Security Operations',
+      senderEmailOrPhone: 'security-alert@micros0ft-portal-auth.xyz',
+      subject: 'URGENT: 3 Unauthorized Logins Detected - Verify 2FA in 15 Minutes',
       claimedOrganization: 'Microsoft Cloud & Office 365',
       targetUrl: 'https://login.micros0ft-portal-auth.xyz/verify-token?user=victim@corp.com',
       headers: {
         spf: 'fail',
         dkim: 'none',
         dmarc: 'fail',
-        replyTo: 'harvester-relay@protonmail.com',
-        returnPath: 'bounce-tracker@sec-microsoft-verify-auth.xyz'
+        replyTo: 'credential-relay@protonmail.com',
+        returnPath: 'bounce@micros0ft-portal-auth.xyz'
       },
-      attachments: ['Security_Incident_Log_CRITICAL.pdf'],
+      attachments: ['Security_Incident_CRITICAL.pdf'],
       content: `Attention User,
 
-Our Global Cybersecurity Monitoring Center has detected 3 unauthorized login attempts originating from St. Petersburg, Russia on your Microsoft 365 corporate account.
+Our Global Threat Monitoring Center detected 3 unauthorized login attempts originating from St. Petersburg, Russia on your Microsoft 365 enterprise account.
 
-Your session will be permanently SUSPENDED within 15 minutes unless you verify your identity and confirm your multi-factor authentication (2FA) credential.
+Your corporate session will be permanently SUSPENDED within 15 minutes unless you confirm your multi-factor authentication (2FA) credential.
 
-Failure to verify immediately will result in complete lockout from corporate Outlook, Teams, and OneDrive, and your supervisor will be notified of a policy non-compliance violation.
+Failure to verify immediately will result in complete lockout from Outlook, Teams, and OneDrive, and your supervisor will be notified of a policy non-compliance violation.
 
 👉 CLICK HERE TO VERIFY 2FA & SECURE YOUR ACCOUNT:
 https://login.micros0ft-portal-auth.xyz/verify-token?user=victim@corp.com
@@ -51,97 +51,46 @@ Microsoft Tier-3 Threat Response Unit`
     }
   },
   {
-    id: 'bec-ceo-wire-fraud',
-    name: 'Executive Impersonation (CEO Wire Fraud / BEC)',
-    category: 'Business Email Compromise (BEC)',
-    badge: 'Targeted Spearphishing',
-    threatLevelExpected: 'Critical',
-    description: 'A spoofed CEO email to the VP of Finance demanding an urgent confidential acquisition wire transfer bypassing standard review.',
-    input: {
-      type: 'email',
-      senderName: 'David Sterling (CEO)',
-      senderEmailOrPhone: 'david.sterling.executive.corp@gmail.com',
-      subject: 'Strictly Confidential: Urgent Acquisition Deposit required today',
-      claimedOrganization: 'Apex Global Enterprises',
-      headers: {
-        spf: 'neutral',
-        dkim: 'none',
-        dmarc: 'fail',
-        replyTo: 'd.sterling.private.acquisitions@consultant.com'
-      },
-      attachments: ['Confidential_M&A_Wire_Instructions.pdf'],
-      content: `Hi Sarah,
-
-I am currently in an all-day board meeting with our legal counsel finalizing the Project Titan acquisition. As discussed in our executive roadmap, this is strictly confidential.
-
-I need you to process an immediate wire transfer of $84,500 for the legal retainer before the close of business today (4:00 PM EST). 
-
-Because of the extreme sensitivity of this transaction, please do NOT discuss this with anyone in accounting or over Slack. I cannot take phone calls right now due to the NDA session.
-
-Please confirm you received this and I will send the bank wire coordinates. Time is of the essence.
-
-Sent from my iPad
-David Sterling
-Chief Executive Officer`
-    }
-  },
-  {
-    id: 'irs-tax-refund-sms',
-    name: 'IRS Tax Refund Smishing (SMS Phishing)',
-    category: 'Smishing & Identity Theft',
-    badge: 'Mobile SMS Attack',
+    id: 'mode-2-high',
+    name: 'Mode 2: LinkedIn Recruiter Malware Drop (High Threat — 78%)',
+    category: 'Targeted Malware Staging & Social Eng',
+    badge: 'High Threat (78%)',
     threatLevelExpected: 'High',
-    description: 'SMS message claiming the taxpayer is owed an uncollected $1,420.50 refund with a shortened link requesting SSN and bank details.',
-    input: {
-      type: 'sms',
-      senderName: '+1 (833) 492-0193',
-      senderEmailOrPhone: '+1 (833) 492-0193',
-      claimedOrganization: 'Internal Revenue Service (IRS)',
-      targetUrl: 'https://irs-direct-refund-portal2026.link/claim-now',
-      content: `[IRS-GOV ALERT]: Our automated system shows an outstanding federal tax refund of $1,420.50 for your record. You must confirm your direct deposit and SSN before 11:59 PM today to avoid forfeiture: https://irs-direct-refund-portal2026.link/claim-now. Reply STOP to cancel.`
-    }
-  },
-  {
-    id: 'linkedin-hunter-fake-job',
-    name: 'LinkedIn Recruiter Malware Lure (Social Engineering)',
-    category: 'Social Engineering & Malware',
-    badge: 'Social Media Infiltration',
-    threatLevelExpected: 'High',
-    description: 'Fake high-paying remote job opportunity delivering a malicious archive containing an info-stealer disguised as job specs.',
+    description: 'Spearphishing social engineering lure exploiting high compensation to deliver an encrypted password-protected info-stealer payload.',
     input: {
       type: 'social_dm',
-      senderName: 'Elena Rostova - Senior Talent Partner',
-      senderEmailOrPhone: '@elena_tech_talent (LinkedIn)',
-      claimedOrganization: 'Google DeepMind Talent Acquisitions',
-      targetUrl: 'https://deepmind-careers-download.s3-accelerate.amazonaws.com/Senior_AI_Architect_Brief.zip',
+      senderName: 'Elena Rostova — Lead Talent Partner',
+      senderEmailOrPhone: '@elena_talent_ai (LinkedIn)',
+      claimedOrganization: 'Global AI Research Labs',
+      targetUrl: 'https://careers-confidential-download.s3-accelerate.amazonaws.com/Senior_AI_Architect_Brief.zip',
       attachments: ['Senior_AI_Architect_Brief.zip.exe'],
-      content: `Hi Alex! 
+      content: `Hi Alex!
 
-I came across your profile and was genuinely impressed by your background. We are quietly scouting a Lead AI Security Architect for our confidential generative agent team ($280k - $340k + equity, 100% remote).
+I came across your profile and was genuinely impressed by your security architecture background. We are scouting a Lead AI Security Architect for our confidential generative agent team ($280k - $340k + equity, 100% remote).
 
-Because the project is unreleased, the full job specification and compensation benchmark are in our encrypted recruiter package. 
+Because the project is unreleased, the full job specification and compensation benchmark are in our encrypted recruiter package.
 
 Please download and review the requirements document from our secure AWS repository:
-https://deepmind-careers-download.s3-accelerate.amazonaws.com/Senior_AI_Architect_Brief.zip
+https://careers-confidential-download.s3-accelerate.amazonaws.com/Senior_AI_Architect_Brief.zip
 
 Password to extract: 2026
 Can you review this today and let me know when you're open for a brief 15-minute chat with our VP?`
     }
   },
   {
-    id: 'dhl-package-quishing',
-    name: 'DHL / USPS Undelivered Package Fee Scam',
-    category: 'Delivery Fraud',
-    badge: 'Consumer Scam',
-    threatLevelExpected: 'High',
-    description: 'Fake package delivery notification demanding a $2.95 redelivery fee to capture credit card and personal address details.',
+    id: 'mode-3-suspicious',
+    name: 'Mode 3: DHL Express Package Redelivery Scam (Suspicious — 58%)',
+    category: 'Logistics Payment & Smishing Scam',
+    badge: 'Suspicious (58%)',
+    threatLevelExpected: 'Suspicious',
+    description: 'Impersonates package delivery demanding a nominal $2.95 fee within 24 hours to capture credit card and personal identity details.',
     input: {
       type: 'email',
-      senderName: 'DHL Express Dispatch',
-      senderEmailOrPhone: 'tracking-update@dhl-parcel-resolution-center.info',
-      subject: 'Package ID #US-98214-G: Address Incomplete - Action Required',
+      senderName: 'DHL Express Dispatch Hub',
+      senderEmailOrPhone: 'tracking@dhl-parcel-resolution.info',
+      subject: 'Shipment #US-98214: Address Incomplete - Action Required',
       claimedOrganization: 'DHL Express International',
-      targetUrl: 'https://dhl-address-update-fee.info/pay?id=US-98214-G',
+      targetUrl: 'https://dhl-address-update-fee.info/pay?id=US-98214',
       headers: {
         spf: 'fail',
         dkim: 'fail',
@@ -149,30 +98,103 @@ Can you review this today and let me know when you're open for a brief 15-minute
       },
       content: `Dear Customer,
 
-Your incoming shipment (Tracking: #US-98214-G) could not be delivered on August 27, 2026 due to an incorrect postal address.
+Your incoming shipment (Tracking: #US-98214) could not be delivered on August 27, 2026 due to an incorrect postal address.
 
 Your parcel is currently held at our regional distribution hub. To reschedule redelivery and update your address, a processing fee of $2.95 USD must be paid within 24 hours.
 
 Failure to pay will result in the package being marked as abandoned and returned to the international sender at your expense.
 
 👉 Update Address & Pay Redelivery Fee:
-https://dhl-address-update-fee.info/pay?id=US-98214-G
+https://dhl-address-update-fee.info/pay?id=US-98214
 
 Thank you for choosing DHL Express.`
     }
   },
   {
-    id: 'legitimate-it-maintenance',
-    name: 'Legitimate Corporate IT Planned Maintenance Notice',
-    category: 'Legitimate Communication',
-    badge: 'Safe Baseline',
-    threatLevelExpected: 'Safe',
-    description: 'Authentic scheduled maintenance notice from internal IT department with verified SPF/DKIM and no coercive credential requests.',
+    id: 'mode-4-moderate',
+    name: 'Mode 4: DocuSign Unverified Vendor Contract (Moderate — 38%)',
+    category: 'External Document Relay / Moderate Caution',
+    badge: 'Moderate (38%)',
+    threatLevelExpected: 'Moderate',
+    description: 'External cloud document signature request from an unverified vendor relay with neutral SPF and unconfirmed sender identity.',
+    input: {
+      type: 'email',
+      senderName: 'DocuSign Document Cloud',
+      senderEmailOrPhone: 'dse@docusign-contracts-share.net',
+      subject: 'Please DocuSign: 2026 Vendor Master Services Agreement (MSA)',
+      claimedOrganization: 'DocuSign Cloud Services',
+      targetUrl: 'https://app.docusign-contracts-share.net/signing/doc-89412',
+      headers: {
+        spf: 'neutral',
+        dkim: 'none',
+        dmarc: 'none',
+        replyTo: 'legal-contracts@thirdparty-vendor.com'
+      },
+      attachments: ['Vendor_Services_Agreement_2026.pdf'],
+      content: `Hello Alex,
+
+Apex Digital Solutions has sent you a document to review and sign via DocuSign Cloud.
+
+Document: 2026 Vendor Master Services Agreement (MSA)
+Pages: 14 pages
+Review Window: 7 business days
+
+Please review and electronically sign this document at your earliest convenience:
+https://app.docusign-contracts-share.net/signing/doc-89412
+
+If you are not the intended signer, please notify the sender immediately.`
+    }
+  },
+  {
+    id: 'mode-5-low',
+    name: 'Mode 5: LinkedIn Job Alerts & Network Digest (Low Risk — 20%)',
+    category: 'Verified Platform Notification',
+    badge: 'Low Risk (20%)',
+    threatLevelExpected: 'Low',
+    description: 'Authentic weekly LinkedIn job matches and network connection digest with cryptographically verified SPF/DKIM and official TLS endpoints.',
+    input: {
+      type: 'email',
+      senderName: 'LinkedIn Job Alerts',
+      senderEmailOrPhone: 'jobalerts-noreply@linkedin.com',
+      subject: 'Alex, 4 new Cloud Security Engineer jobs match your profile',
+      claimedOrganization: 'LinkedIn Corporation',
+      targetUrl: 'https://www.linkedin.com/comm/jobs/view/4091823',
+      headers: {
+        spf: 'pass',
+        dkim: 'pass',
+        dmarc: 'pass',
+        replyTo: 'donotreply@linkedin.com',
+        returnPath: 'bounce-tracker@linkedin.com'
+      },
+      content: `Hi Alex,
+
+Here are this week's top job recommendations tailored to your profile "Senior Security Analyst":
+
+1. Microsoft — Cloud & Identity Security Engineer (Seattle, WA)
+2. Datadog — Staff Detection & Response Specialist
+3. CrowdStrike — Threat Intelligence Researcher
+
+Also, 3 members viewed your profile this week.
+
+View Full Recommendations on LinkedIn:
+https://www.linkedin.com/comm/jobs/view/4091823
+
+You are receiving Job Alert emails based on your LinkedIn settings.
+Manage notification settings: https://www.linkedin.com/e/settings/notifications`
+    }
+  },
+  {
+    id: 'mode-6-benign',
+    name: 'Mode 6: Corporate IT Planned Maintenance Notice (Benign — 7%)',
+    category: 'Verified Internal Enterprise Notice',
+    badge: 'Benign (7%)',
+    threatLevelExpected: 'Benign',
+    description: 'Authentic internal IT infrastructure maintenance bulletin with verified SPF/DKIM/DMARC and explicit zero-action / zero-credential clauses.',
     input: {
       type: 'email',
       senderName: 'Corporate IT Operations',
       senderEmailOrPhone: 'it-announcements@enterprise-corp.com',
-      subject: 'Scheduled Maintenance Notice: VPN & Cloud Services (Saturday 2 AM - 4 AM EST)',
+      subject: 'Scheduled Maintenance Notice: VPN & Cloud Gateway (Saturday 2 AM - 4 AM EST)',
       claimedOrganization: 'Enterprise Corp Global IT',
       targetUrl: 'https://wiki.enterprise-corp.com/it/maintenance-calendar-aug2026',
       headers: {

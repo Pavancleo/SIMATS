@@ -54,10 +54,10 @@ export const InputPanel: React.FC<InputPanelProps> = ({
                 key={sample.id}
                 id={`quick-pill-${sample.id}`}
                 onClick={() => onSelectSampleById(sample.id)}
-                className="text-[11px] px-2.5 py-1 rounded-md bg-slate-800/90 hover:bg-slate-700 text-slate-300 hover:text-cyan-300 border border-slate-700/60 transition-all truncate max-w-[140px] sm:max-w-none"
+                className="text-[11px] px-2.5 py-1 rounded-md bg-slate-800/90 hover:bg-slate-700 text-slate-300 hover:text-cyan-300 border border-slate-700/60 transition-all font-mono"
                 title={sample.name}
               >
-                {sample.name.split(' (')[0]}
+                {sample.badge}
               </button>
             ))}
           </div>

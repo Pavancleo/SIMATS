@@ -134,11 +134,35 @@ export const FeaturesNavBar: React.FC<FeaturesNavBarProps> = ({
         </div>
       );
     }
-    if (score >= 50) {
+    if (score >= 65) {
+      return (
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-500/20 text-orange-300 border border-orange-500/40 text-xs font-mono font-bold">
+          <ShieldAlert className="w-3.5 h-3.5 text-orange-400" />
+          <span>{score}/100 HIGH</span>
+        </div>
+      );
+    }
+    if (score >= 45) {
       return (
         <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-mono font-bold">
           <ShieldAlert className="w-3.5 h-3.5 text-amber-400" />
-          <span>{score}/100 HIGH RISK</span>
+          <span>{score}/100 SUSPICIOUS</span>
+        </div>
+      );
+    }
+    if (score >= 25) {
+      return (
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-yellow-500/20 text-yellow-300 border border-yellow-500/40 text-xs font-mono font-bold">
+          <ShieldAlert className="w-3.5 h-3.5 text-yellow-400" />
+          <span>{score}/100 MODERATE</span>
+        </div>
+      );
+    }
+    if (score >= 12) {
+      return (
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-xs font-mono font-bold">
+          <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+          <span>{score}/100 LOW RISK</span>
         </div>
       );
     }

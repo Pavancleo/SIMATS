@@ -170,7 +170,7 @@ export interface FullThreatAnalysisResult {
   overallRiskScore: number; // 0-100
   humanManipulationRiskScore: number; // 0-100
   technicalThreatRiskScore: number; // 0-100
-  threatLevel: 'Safe' | 'Low Suspicion' | 'Suspicious' | 'High Risk' | 'Critical Attack';
+  threatLevel: 'Safe' | 'Low Suspicion' | 'Suspicious' | 'Moderate' | 'Moderate Caution' | 'High Risk' | 'Critical Attack' | 'Benign';
   threatCategory: ThreatCategory;
   categoryName: string;
   confidenceScore: number; // 0-100

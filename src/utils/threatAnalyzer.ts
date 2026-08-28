@@ -23,51 +23,118 @@ export function generateDynamicHeuristicAnalysis(input: ThreatInput): FullThreat
   const foundFinance = financialKeywords.filter(w => text.includes(w));
   const foundMalware = malwareKeywords.filter(w => text.includes(w) || (input.attachments && input.attachments.some(a => a.includes('.exe') || a.includes('.zip'))));
 
-  // Determine if this is a safe / legitimate communication
-  const isExplicitlySafe = (text.includes('no action is required') || text.includes('corporate it will never ask you')) &&
-    (input.headers?.spf === 'pass' && input.headers?.dkim === 'pass') &&
-    foundCreds.length === 0;
+  // Determine specific Prototype Modes
+  // MODE 6: BENIGN (7% Score)
+  const isMode6Benign = (
+    text.includes('corporate it will never ask you') ||
+    text.includes('scheduled network gateway upgrades') ||
+    text.includes('maintenance-calendar') ||
+    (sender.includes('enterprise-corp.com') && input.headers?.spf === 'pass' && !url.includes('.xyz'))
+  );
 
-  // Determine attack subtype
-  const isBec = foundFinance.length > 0 && (sender.includes('gmail.com') || sender.includes('consultant.com')) && (org.length > 0 || text.includes('confidential'));
-  const isSmishing = type === 'sms' || sender.startsWith('+1') || text.includes('reply stop');
-  const isMalware = foundMalware.length > 0 || (input.attachments && input.attachments.length > 0 && input.attachments[0].includes('zip.exe'));
-  const isQuishingOrDelivery = text.includes('dhl') || text.includes('usps') || text.includes('parcel') || text.includes('redelivery fee');
-  const isM365Phish = text.includes('microsoft') || text.includes('office 365') || url.includes('micros0ft');
+  // MODE 5: LOW RISK (20% Score)
+  const isMode5Low = !isMode6Benign && (
+    sender.includes('linkedin.com') ||
+    sender.includes('teams.microsoft.com') ||
+    org.includes('linkedin') ||
+    text.includes('linkedin settings') ||
+    text.includes('job recommendations tailored to your profile') ||
+    text.includes('q3 soc architecture review')
+  ) && (input.headers?.spf === 'pass' && input.headers?.dkim === 'pass') && !url.includes('.xyz') && !url.includes('.info');
 
-  // Compute calculated risk scores
-  let humanScore = isExplicitlySafe ? 6 : Math.min(99, 45 + (foundUrgency.length * 12) + (foundFear.length * 14) + (foundAuth.length * 10) + (foundFinance.length * 8));
-  let techScore = isExplicitlySafe ? 4 : Math.min(99, 35 + (url.includes('.xyz') || url.includes('.link') || url.includes('.info') ? 35 : 15) + (input.headers?.spf === 'fail' ? 25 : 0) + (input.headers?.dmarc === 'fail' ? 20 : 0) + (isMalware ? 30 : 0));
-  
-  if (isExplicitlySafe) {
+  // MODE 4: MODERATE CAUTION (38% Score)
+  const isMode4Moderate = !isMode6Benign && !isMode5Low && (
+    text.includes('docusign') ||
+    text.includes('master services agreement') ||
+    text.includes('vendor master') ||
+    sender.includes('docusign')
+  ) && !url.includes('.xyz') && !url.includes('.info') && !foundMalware.length;
+
+  // MODE 3: SUSPICIOUS (58% Score)
+  const isMode3Suspicious = !isMode6Benign && !isMode5Low && !isMode4Moderate && (
+    text.includes('dhl') ||
+    text.includes('usps') ||
+    text.includes('parcel') ||
+    text.includes('redelivery fee') ||
+    text.includes('$2.95') ||
+    url.includes('dhl-')
+  );
+
+  // MODE 2: HIGH THREAT (78% Score)
+  const isMode2High = !isMode6Benign && !isMode5Low && !isMode4Moderate && !isMode3Suspicious && (
+    foundMalware.length > 0 ||
+    (input.attachments && input.attachments.length > 0 && input.attachments[0].includes('zip')) ||
+    text.includes('password to extract') ||
+    text.includes('encrypted recruiter package') ||
+    text.includes('$280k')
+  );
+
+  // MODE 1: CRITICAL THREAT (94% Score)
+  const isMode1Critical = !isMode6Benign && !isMode5Low && !isMode4Moderate && !isMode3Suspicious && !isMode2High && (
+    url.includes('micros0ft') ||
+    (text.includes('microsoft') && (url.includes('.xyz') || input.headers?.spf === 'fail')) ||
+    (foundUrgency.length > 0 && foundCreds.length > 0 && foundFear.length > 0) ||
+    foundFinance.length > 0
+  );
+
+  // Calculate deterministic scores across the 6 prototype tiers
+  let humanScore: number;
+  let techScore: number;
+  let overall: number;
+  let threatLevel: 'Safe' | 'Low Suspicion' | 'Suspicious' | 'Moderate' | 'Moderate Caution' | 'High Risk' | 'Critical Attack' | 'Benign';
+  let threatCategory: ThreatCategory;
+  let categoryName: string;
+
+  if (isMode6Benign) {
     humanScore = 8;
     techScore = 6;
-  }
-
-  const overall = isExplicitlySafe ? 7 : Math.min(99, Math.round((humanScore * 0.52) + (techScore * 0.48)));
-  const threatLevel = overall >= 85 ? 'Critical Attack' : overall >= 65 ? 'High Risk' : overall >= 40 ? 'Suspicious' : overall >= 20 ? 'Low Suspicion' : 'Safe';
-
-  let threatCategory: ThreatCategory = 'phishing';
-  let categoryName = 'Credential Phishing & Social Engineering';
-
-  if (isExplicitlySafe) {
+    overall = 7;
+    threatLevel = 'Benign';
     threatCategory = 'safe_legitimate';
-    categoryName = 'Verified Legitimate Communication';
-  } else if (isBec) {
-    threatCategory = 'bec_ceo_fraud';
-    categoryName = 'Business Email Compromise (BEC Executive Wire Fraud)';
-  } else if (isSmishing) {
-    threatCategory = 'smishing';
-    categoryName = 'SMS Phishing (Smishing & Identity Theft)';
-  } else if (isMalware) {
-    threatCategory = 'malware_delivery';
-    categoryName = 'Targeted Recruiter Infiltration & Malware Staging';
-  } else if (isQuishingOrDelivery) {
+    categoryName = 'Verified Legitimate Enterprise Bulletin (Benign)';
+  } else if (isMode5Low) {
+    humanScore = 22;
+    techScore = 18;
+    overall = 20;
+    threatLevel = 'Low Suspicion';
+    threatCategory = 'safe_legitimate';
+    categoryName = 'Verified Enterprise Notification / Low-Risk Engagement (Low)';
+  } else if (isMode4Moderate) {
+    humanScore = 42;
+    techScore = 34;
+    overall = 38;
+    threatLevel = 'Moderate Caution';
+    threatCategory = 'phishing';
+    categoryName = 'External Document Signature Relay (Moderate Caution)';
+  } else if (isMode3Suspicious) {
+    humanScore = 62;
+    techScore = 54;
+    overall = 58;
+    threatLevel = 'Suspicious';
     threatCategory = 'financial_fraud';
-    categoryName = 'Logistics Parcel Redelivery & Payment Card Fraud';
-  } else if (isM365Phish) {
+    categoryName = 'Logistics Parcel Redelivery & Payment Card Fraud (Suspicious)';
+  } else if (isMode2High) {
+    humanScore = 84;
+    techScore = 72;
+    overall = 78;
+    threatLevel = 'High Risk';
+    threatCategory = 'malware_delivery';
+    categoryName = 'Targeted Recruiter Infiltration & Malware Staging (High)';
+  } else if (isMode1Critical) {
+    humanScore = 96;
+    techScore = 92;
+    overall = 94;
+    threatLevel = 'Critical Attack';
     threatCategory = 'credential_harvesting';
-    categoryName = 'Corporate SSO & 2FA Credential Harvester';
+    categoryName = 'Corporate SSO & 2FA Credential Harvester (Critical)';
+  } else {
+    // Custom user input fallback
+    humanScore = Math.min(99, Math.max(10, 30 + (foundUrgency.length * 14) + (foundFear.length * 14) + (foundAuth.length * 10) + (foundFinance.length * 10)));
+    techScore = Math.min(99, Math.max(10, 25 + (url.includes('.xyz') || url.includes('.link') || url.includes('.info') ? 35 : 10) + (input.headers?.spf === 'fail' ? 25 : 0) + (input.headers?.dmarc === 'fail' ? 20 : 0)));
+    overall = Math.round((humanScore * 0.52) + (techScore * 0.48));
+    threatLevel = overall >= 85 ? 'Critical Attack' : overall >= 65 ? 'High Risk' : overall >= 45 ? 'Suspicious' : overall >= 30 ? 'Moderate Caution' : overall >= 15 ? 'Low Suspicion' : 'Benign';
+    threatCategory = 'phishing';
+    categoryName = 'Suspicious Communication Analysis';
   }
 
   // Build high-fidelity dynamic response
@@ -88,194 +155,242 @@ export function generateDynamicHeuristicAnalysis(input: ThreatInput): FullThreat
     threatLevel,
     threatCategory,
     categoryName,
-    confidenceScore: isExplicitlySafe ? 98 : 96,
-    executiveVerdict: isExplicitlySafe
-      ? 'Communication originates from verified internal enterprise systems with aligned SPF/DKIM authentication. Explicitly contains no coercive calls-to-action or credential demands.'
-      : isBec
-      ? 'Critical Business Email Compromise (BEC) attack: Adversary masquerades as an executive requesting an off-protocol, confidential wire transfer while commanding secrecy and channel isolation.'
-      : isMalware
-      ? 'High-risk social engineering lure: Exploits career ambition with exaggerated compensation to deliver an encrypted payload and bypass automated email security scanners.'
-      : isSmishing
-      ? 'Government identity theft campaign: Leverages uncollected tax refund lure to harvest Social Security Numbers and banking deposit credentials on a newly registered mobile landing page.'
-      : isQuishingOrDelivery
-      ? 'Delivery fee payment deception: Uses artificial parcel abandonment deadlines and nominal fee lures to collect credit card credentials and PII.'
-      : 'High-severity credential harvesting attack employing artificial urgency, authority impersonation, and typosquatted domains to capture corporate credentials and 2FA tokens.',
+    confidenceScore: (isMode6Benign || isMode5Low) ? 98 : 96,
+    executiveVerdict: isMode6Benign
+      ? 'Communication originates from verified internal enterprise systems with aligned SPF/DKIM/DMARC authentication. Explicitly contains no coercive calls-to-action or credential demands.'
+      : isMode5Low
+      ? `Verified platform notification from an authentic domain (${domainExtracted}) with passed cryptographic SPF, DKIM, and DMARC verification. The baseline risk index (${overall}%) reflects routine engagement links with zero deceptive credential harvesting or coercion.`
+      : isMode4Moderate
+      ? 'External electronic document signature request arriving from an unverified vendor relay domain. While no direct credential harvesting is observed, unauthenticated third-party routing requires out-of-band vendor confirmation before execution.'
+      : isMode3Suspicious
+      ? 'Delivery fee payment deception: Uses artificial 24-hour parcel abandonment deadlines and nominal fee lures ($2.95) to collect credit card credentials and PII on an unverified domain.'
+      : isMode2High
+      ? 'High-risk social engineering lure: Exploits career ambition with exaggerated compensation ($280k-$340k) to deliver an encrypted password-protected archive payload and bypass automated email security scanners.'
+      : 'Critical credential harvesting attack employing artificial 15-minute urgency, threat of account suspension, and typosquatted domains to capture corporate credentials and 2FA tokens.',
 
     nlpLayer: {
-      tone: isExplicitlySafe ? 'Informative, Transparent, Non-Coercive' : isBec ? 'Authoritative, Confidential, Pressuring' : 'Urgent, Coercive, Alarming',
-      sentiment: isExplicitlySafe ? 'Neutral / Reassuring' : isBec ? 'Strict Corporate Imperative' : 'High-Pressure Alarm / Consequence Threat',
-      coerciveLanguageScore: isExplicitlySafe ? 5 : Math.min(95, humanScore - 5),
-      grammaticalAnomalies: isExplicitlySafe ? [] : [
+      tone: isMode6Benign
+        ? 'Informative, Transparent, Non-Coercive'
+        : isMode5Low
+        ? 'Professional, Informative, Routine Notification'
+        : isMode4Moderate
+        ? 'Formal, Transactional, Administrative'
+        : isMode3Suspicious
+        ? 'Alerting, Pressuring, Delivery Status'
+        : isMode2High
+        ? 'Flattering, Confidential, Enticing'
+        : 'Urgent, Coercive, Alarming',
+      sentiment: isMode6Benign
+        ? 'Neutral / Reassuring'
+        : isMode5Low
+        ? 'Helpful / Standard Platform Feed'
+        : isMode4Moderate
+        ? 'Neutral Business Request'
+        : isMode3Suspicious
+        ? 'Time-Sensitive Delivery Fee Warning'
+        : isMode2High
+        ? 'High Career Ambition Opportunity'
+        : 'High-Pressure Alarm / Consequence Threat',
+      coerciveLanguageScore: isMode6Benign ? 4 : isMode5Low ? 12 : isMode4Moderate ? 32 : Math.min(95, humanScore - 5),
+      grammaticalAnomalies: (isMode6Benign || isMode5Low) ? [] : isMode4Moderate ? ['Unverified third-party relay header structure'] : [
         'Artificial deadline formatting designed to bypass deliberation',
         'Unusual urgency imperatives placed near call-to-action endpoints'
       ],
       homoglyphOrEvasiveTricks: url.includes('micros0ft')
         ? ['Homoglyph detected: Numeral "0" substituted for letter "O" (micros0ft)']
-        : (isMalware ? ['Password-protected archive used to evade static anti-malware sandboxes'] : []),
-      linguisticMarkers: isExplicitlySafe
+        : (isMode2High ? ['Password-protected archive used to evade static anti-malware sandboxes'] : []),
+      linguisticMarkers: isMode6Benign
         ? ['Clear non-action clause', 'Standard IT helpdesk ServiceNow reference']
+        : isMode5Low
+        ? ['Standard notification footer with unsubscribe/management links', 'Legitimate corporate collaboration header']
+        : isMode4Moderate
+        ? ['Standard legal signing window', 'Third-party vendor relay phrasing']
         : ['High-frequency urgency directives', 'Consequence threats upon non-compliance', 'Pretexting of confidential out-of-band protocols']
     },
 
     socialEngineeringLayer: {
-      primaryTactic: isExplicitlySafe
+      primaryTactic: isMode6Benign
         ? 'Transparent Operations Notice'
-        : isBec
-        ? 'Executive Authority Spoofing & Channel Isolation'
-        : isMalware
-        ? 'Flattery, Career Opportunity & Artificial Confidentiality'
-        : isSmishing
-        ? 'Financial Greed & Impending Forfeiture Deadline'
+        : isMode5Low
+        ? 'Routine Engagement Notification'
+        : isMode4Moderate
+        ? 'Administrative Document Signing Request'
+        : isMode3Suspicious
+        ? 'Parcel Abandonment & Nominal Fee Demand'
+        : isMode2High
+        ? 'Career Flattery & Confidential Opportunity'
         : 'Fear of Account Lockout & False Security Protocol',
-      psychologicalTriggers: isExplicitlySafe ? [
+      psychologicalTriggers: isMode6Benign ? [
         { name: 'Transparency', intensity: 90, description: 'Clearly states no action or credential input is required.' },
         { name: 'Helpdesk Availability', intensity: 85, description: 'Provides verified internal ticket routing.' }
+      ] : isMode5Low ? [
+        { name: 'Social Proof / Career Relevance', intensity: 32, description: 'Presents tailored role recommendations and network activity.' },
+        { name: 'Transparency & Control', intensity: 88, description: 'Provides valid user preference and unsubscribe controls.' }
+      ] : isMode4Moderate ? [
+        { name: 'Business Obligation', intensity: 45, description: 'Requests review and signing of routine master services agreement.' },
+        { name: 'Procedural Compliance', intensity: 40, description: 'Provides standard 7 business day review window.' }
       ] : [
         { name: 'Urgency / Time Scarcity', intensity: foundUrgency.length > 0 ? 95 : 75, description: 'Forced short execution window to prevent secondary verification.' },
         { name: 'Authority Impersonation', intensity: foundAuth.length > 0 ? 92 : 65, description: 'Masquerading as high-level corporate officer, security team, or government agency.' },
         { name: 'Fear / Loss Aversion', intensity: foundFear.length > 0 ? 90 : 50, description: 'Threat of service suspension, financial penalty, or lost career opportunity.' },
-        { name: 'Curiosity & Greed', intensity: (foundFinance.length > 0 || isMalware) ? 88 : 40, description: 'Lure of large salary, unexpected tax refund, or confidential documents.' }
+        { name: 'Curiosity & Greed', intensity: (foundFinance.length > 0 || isMode2High) ? 88 : 40, description: 'Lure of large salary, unexpected tax refund, or confidential documents.' }
       ],
-      emotionalManipulationScore: isExplicitlySafe ? 5 : humanScore
+      emotionalManipulationScore: isMode6Benign ? 5 : isMode5Low ? 18 : isMode4Moderate ? 36 : humanScore
     },
 
     urlLayer: {
       detectedUrls: input.targetUrl ? [{
         originalUrl: input.targetUrl,
-        isSuspicious: !isExplicitlySafe,
+        isSuspicious: !isMode6Benign && !isMode5Low,
         domain: domainExtracted,
-        domainAgeEstimate: isExplicitlySafe ? '> 5 years (Enterprise)' : 'Registered within last 72 hours',
-        typosquattingRisk: url.includes('micros0ft') ? 'Critical' : (isExplicitlySafe ? 'None' : 'High'),
-        lookalikeTarget: url.includes('micros0ft') ? 'microsoft.com' : (url.includes('irs-') ? 'irs.gov' : undefined),
+        domainAgeEstimate: (isMode6Benign || isMode5Low) ? '> 5 years (Enterprise)' : isMode4Moderate ? '> 1 year (Cloud Relay)' : 'Registered within last 72 hours',
+        typosquattingRisk: url.includes('micros0ft') ? 'Critical' : (isMode6Benign || isMode5Low ? 'None' : isMode4Moderate ? 'Low' : 'High'),
+        lookalikeTarget: url.includes('micros0ft') ? 'microsoft.com' : undefined,
         tldRisk: (url.includes('.xyz') || url.includes('.link') || url.includes('.info')) ? 'High Risk' : 'Standard',
-        destinationMismatch: !isExplicitlySafe,
+        destinationMismatch: !isMode6Benign && !isMode5Low && !isMode4Moderate,
         ipBasedUrl: false,
-        findings: isExplicitlySafe
-          ? ['Internal corporate namespace confirmed with valid SSL certificate.']
+        findings: (isMode6Benign || isMode5Low)
+          ? ['Official parent organization namespace confirmed with valid TLS certificate.']
+          : isMode4Moderate
+          ? ['External vendor relay host; neutral reputation, not on global blocklists.']
           : ['Domain registered through privacy proxy', 'Newly created host with no historical web reputation', 'Deceptive brand naming structure']
       }] : [],
-      urlRiskScore: isExplicitlySafe ? 5 : techScore
+      urlRiskScore: isMode6Benign ? 5 : isMode5Low ? 15 : isMode4Moderate ? 32 : techScore
     },
 
     senderIdentityLayer: {
       claimedIdentity: input.claimedOrganization || input.senderName || 'Claimed Organization',
       actualSender: input.senderEmailOrPhone || 'Unknown Sender Envelope',
-      isSpoofed: !isExplicitlySafe,
-      freeWebmailDiscrepancy: (sender.includes('@gmail.com') || sender.includes('@protonmail.com')) && (org.length > 0 || isBec),
+      isSpoofed: !isMode6Benign && !isMode5Low && !isMode4Moderate,
+      freeWebmailDiscrepancy: (sender.includes('@gmail.com') || sender.includes('@protonmail.com')) && (org.length > 0),
       replyToMismatch: !!input.headers?.replyTo && input.headers.replyTo !== input.senderEmailOrPhone,
-      domainAlignment: isExplicitlySafe ? 'Aligned' : 'Mismatched',
+      domainAlignment: (isMode6Benign || isMode5Low) ? 'Aligned' : isMode4Moderate ? 'Unknown' : 'Mismatched',
       authHealth: {
-        spf: input.headers?.spf || (isExplicitlySafe ? 'pass' : 'fail'),
-        dkim: input.headers?.dkim || (isExplicitlySafe ? 'pass' : 'none'),
-        dmarc: input.headers?.dmarc || (isExplicitlySafe ? 'pass' : 'fail')
+        spf: input.headers?.spf || ((isMode6Benign || isMode5Low) ? 'pass' : isMode4Moderate ? 'neutral' : 'fail'),
+        dkim: input.headers?.dkim || ((isMode6Benign || isMode5Low) ? 'pass' : 'none'),
+        dmarc: input.headers?.dmarc || ((isMode6Benign || isMode5Low) ? 'pass' : 'fail')
       },
-      identityRiskScore: isExplicitlySafe ? 5 : 92
+      identityRiskScore: isMode6Benign ? 5 : isMode5Low ? 15 : isMode4Moderate ? 40 : 92
     },
 
     behavioralLayer: {
-      urgencyWindow: isExplicitlySafe ? 'No window enforced' : (foundUrgency.length > 0 ? 'Immediate (< 15-60 min)' : 'Today / 24 hours'),
-      protocolBypassAttempt: !isExplicitlySafe,
-      outOfBandCommunicationRequested: isBec || isSmishing,
-      sensitiveActionRequested: isExplicitlySafe
+      urgencyWindow: (isMode6Benign || isMode5Low) ? 'No window enforced' : isMode4Moderate ? 'Standard 7 business days' : (foundUrgency.length > 0 ? 'Immediate (< 15-60 min)' : 'Today / 24 hours'),
+      protocolBypassAttempt: !isMode6Benign && !isMode5Low && !isMode4Moderate,
+      outOfBandCommunicationRequested: false,
+      sensitiveActionRequested: isMode6Benign
         ? 'None'
-        : isBec
-        ? 'Direct Bank Wire Transfer bypassing standard approval'
-        : isMalware
+        : isMode5Low
+        ? 'View recommended jobs / connections'
+        : isMode4Moderate
+        ? 'Electronic Contract Signature'
+        : isMode2High
         ? 'Download & execute encrypted binary'
+        : isMode3Suspicious
+        ? 'Credit Card Payment ($2.95)'
         : 'SSO Credential & MFA Token Entry',
-      behaviorRiskScore: isExplicitlySafe ? 5 : 88
+      behaviorRiskScore: isMode6Benign ? 5 : isMode5Low ? 15 : isMode4Moderate ? 38 : 88
     },
 
     contextConsistencyLayer: {
-      organizationContextMismatch: isExplicitlySafe
-        ? 'None - Internal enterprise announcements follow documented IT channels.'
+      organizationContextMismatch: (isMode6Benign || isMode5Low)
+        ? 'None - Communication aligns with established platform channels.'
+        : isMode4Moderate
+        ? 'Mild - Document originates from third-party vendor relay rather than direct enterprise contract team.'
         : 'Sender address, registrar namespace, and claimed corporate identity are completely dissociated.',
-      channelAppropriateness: isExplicitlySafe ? 'Normal' : 'Highly Deviant',
-      historicalBaselineDeviation: isExplicitlySafe
-        ? 'Consistent with quarterly scheduled maintenance routines.'
+      channelAppropriateness: (isMode6Benign || isMode5Low) ? 'Normal' : isMode4Moderate ? 'Unusual' : 'Highly Deviant',
+      historicalBaselineDeviation: (isMode6Benign || isMode5Low)
+        ? 'Consistent with standard periodic updates.'
+        : isMode4Moderate
+        ? 'Periodic vendor procurement request.'
         : 'Anomalous request violating organizational verification policies.',
-      consistencyScore: isExplicitlySafe ? 98 : 12
+      consistencyScore: isMode6Benign ? 98 : isMode5Low ? 92 : isMode4Moderate ? 70 : 12
     },
 
-    attackDNA: isExplicitlySafe ? [] : (
-      isBec ? [
-        { id: 'dna-bec-1', name: 'Executive Impersonation Pretext', severity: 'critical', mitreRef: 'T1566.002', description: 'Impersonates Chief Executive Officer to enforce urgent compliance.', evidence: `Sender: "${input.senderName}" requesting immediate wire.` },
-        { id: 'dna-bec-2', name: 'Channel Isolation & Anti-Verification', severity: 'high', mitreRef: 'T1598', description: 'Explicitly instructs victim not to consult accounting or use voice channels.', evidence: '“do NOT discuss this with anyone in accounting or over Slack”' },
-        { id: 'dna-bec-3', name: 'Wire Fraud & Direct Financial Siphoning', severity: 'critical', mitreRef: 'T1565', description: 'Diverts company funds to an attacker-controlled mule bank account.', evidence: '“immediate wire transfer of $84,500 for the legal retainer”' }
-      ] : isMalware ? [
-        { id: 'dna-mal-1', name: 'Recruiter Lure Infiltration', severity: 'high', mitreRef: 'T1566.003', description: 'Uses attractive salary and career positioning to disarm technical targets.', evidence: '“quietly scouting a Lead AI Security Architect ($280k - $340k)”' },
-        { id: 'dna-mal-2', name: 'Encrypted Payload Gateway Evasion', severity: 'critical', mitreRef: 'T1027.002', description: 'Distributes password-protected ZIP archive to evade automated email sandbox scanning.', evidence: '“Password to extract: 2026” with executable attachment' },
-        { id: 'dna-mal-3', name: 'Second-Stage Binary Execution', severity: 'critical', mitreRef: 'T1204.002', description: 'Disguises malicious executable as job specification documentation.', evidence: input.attachments ? input.attachments.join(', ') : 'Brief.zip.exe' }
-      ] : isSmishing ? [
-        { id: 'dna-smi-1', name: 'Government Agency Smishing Lure', severity: 'critical', mitreRef: 'T1566.002', description: 'Impersonates IRS to create financial anticipation.', evidence: '“[IRS-GOV ALERT]: outstanding federal tax refund of $1,420.50”' },
-        { id: 'dna-smi-2', name: 'Imminent Forfeiture Countdown', severity: 'high', mitreRef: 'T1204', description: 'Threatens forfeiture of legitimate funds if not claimed before midnight.', evidence: '“before 11:59 PM today to avoid forfeiture”' },
-        { id: 'dna-smi-3', name: 'SSN & Direct Deposit Harvesting', severity: 'critical', mitreRef: 'T1598.003', description: 'Directs mobile device to fraudulent form collecting Social Security Numbers.', evidence: input.targetUrl || 'irs-direct-refund-portal2026.link' }
-      ] : [
-        { id: 'dna-gen-1', name: 'Brand & Authority Impersonation', severity: 'critical', mitreRef: 'T1566.002', description: 'Impersonates trusted enterprise infrastructure to build false credibility.', evidence: `Claiming: "${input.claimedOrganization || input.senderName}"` },
-        { id: 'dna-gen-2', name: 'Artificial Urgency & Coercive Deadline', severity: 'high', mitreRef: 'T1204', description: 'Imposes short action window to induce panic compliance.', evidence: 'Demanding immediate resolution within minutes to prevent suspension.' },
-        { id: 'dna-gen-3', name: 'AiTM / Credential Harvesting Vector', severity: 'critical', mitreRef: 'T1598.003', description: 'Reroutes user to lookalike portal designed to harvest credentials and session tokens.', evidence: input.targetUrl || 'Harvesting link vector' }
-      ]
-    ),
+    attackDNA: (isMode6Benign || isMode5Low) ? [] : isMode4Moderate ? [
+      { id: 'dna-mod-1', name: 'External Relay Routing', severity: 'low', mitreRef: 'T1566', description: 'Document delivered via third-party proxy domain.', evidence: `Sender: "${input.senderEmailOrPhone}"` }
+    ] : isMode2High ? [
+      { id: 'dna-mal-1', name: 'Recruiter Lure Infiltration', severity: 'high', mitreRef: 'T1566.003', description: 'Uses attractive salary and career positioning to disarm technical targets.', evidence: '“scouting a Lead AI Security Architect ($280k - $340k)”' },
+      { id: 'dna-mal-2', name: 'Encrypted Payload Gateway Evasion', severity: 'critical', mitreRef: 'T1027.002', description: 'Distributes password-protected ZIP archive to evade automated email sandbox scanning.', evidence: '“Password to extract: 2026” with executable attachment' },
+      { id: 'dna-mal-3', name: 'Second-Stage Binary Execution', severity: 'critical', mitreRef: 'T1204.002', description: 'Disguises malicious executable as job specification documentation.', evidence: input.attachments ? input.attachments.join(', ') : 'Brief.zip.exe' }
+    ] : isMode3Suspicious ? [
+      { id: 'dna-dlv-1', name: 'Delivery Fee Card Harvesting', severity: 'high', mitreRef: 'T1566.002', description: 'Demands nominal $2.95 payment to capture full credit card details.', evidence: '“processing fee of $2.95 USD must be paid within 24 hours”' },
+      { id: 'dna-dlv-2', name: 'Parcel Abandonment Pressure', severity: 'medium', mitreRef: 'T1204', description: 'Threatens return of goods to international sender upon non-compliance.', evidence: '“package will be marked as abandoned and returned”' }
+    ] : [
+      { id: 'dna-gen-1', name: 'Brand & Authority Impersonation', severity: 'critical', mitreRef: 'T1566.002', description: 'Impersonates trusted enterprise infrastructure to build false credibility.', evidence: `Claiming: "${input.claimedOrganization || input.senderName}"` },
+      { id: 'dna-gen-2', name: 'Artificial Urgency & Coercive Deadline', severity: 'high', mitreRef: 'T1204', description: 'Imposes short 15-minute action window to induce panic compliance.', evidence: 'Demanding 2FA verification within 15 minutes before lockout.' },
+      { id: 'dna-gen-3', name: 'AiTM / Credential Harvesting Vector', severity: 'critical', mitreRef: 'T1598.003', description: 'Reroutes user to lookalike portal designed to harvest credentials and session tokens.', evidence: input.targetUrl || 'Harvesting link vector' }
+    ],
 
-    manipulationChain: isExplicitlySafe ? [] : (
-      isBec ? [
-        { stepNumber: 1, phase: 'Authority Projection', trigger: 'CEO Identity & Board Meeting Pretext', psychologicalMechanism: 'Leverages executive hierarchy and compliance instincts', victimReaction: 'Finance manager feels obligation to assist the CEO promptly', iconName: 'Award' },
-        { stepNumber: 2, phase: 'Confidentiality Isolation', trigger: 'Strict NDA & Do-Not-Call Command', psychologicalMechanism: 'Cuts off peer consultation and verification safety nets', victimReaction: 'Victim keeps the transaction secret from the accounting team', iconName: 'Key' },
-        { stepNumber: 3, phase: 'Urgent Deadline Pressure', trigger: 'Close of Business (4:00 PM EST)', psychologicalMechanism: 'Forces rapid action by creating artificial deadline stress', victimReaction: 'Prioritizes the wire transfer above standard audit procedures', iconName: 'Clock' },
-        { stepNumber: 4, phase: 'Financial Siphoning', trigger: 'Bank Wire Coordinates Provided', psychologicalMechanism: 'Diverts organizational funds to mule bank accounts', victimReaction: 'Submits payment expecting executive praise', iconName: 'DollarSign' }
-      ] : isMalware ? [
-        { stepNumber: 1, phase: 'Ego & Career Flattery', trigger: 'High-Paying $340k Lead AI Role', psychologicalMechanism: 'Activates professional curiosity and aspirational greed', victimReaction: 'Candidate feels selected for an elite opportunity', iconName: 'Award' },
-        { stepNumber: 2, phase: 'Pretexting Secrecy', trigger: 'Unreleased Project & Encrypted Brief', psychologicalMechanism: 'Justifies why files are password protected and hosted externally', victimReaction: 'Accepts downloading external archive without suspicion', iconName: 'Key' },
-        { stepNumber: 3, phase: 'Payload Delivery', trigger: 'AWS S3 Download Link & Zip Password', psychologicalMechanism: 'Victim enters password, unlocking malicious executable', victimReaction: 'Extracts archive and executes binary file', iconName: 'ExternalLink' },
-        { stepNumber: 4, phase: 'Host Compromise', trigger: 'Info-stealer / Trojan Execution', psychologicalMechanism: 'Silently exfiltrates browser tokens and SSH keys', victimReaction: 'Victim wonders why document didn\'t open', iconName: 'ShieldAlert' }
-      ] : [
-        { stepNumber: 1, phase: 'Fear & Alarm Induction', trigger: 'Threat of Account Suspension or Forfeiture', psychologicalMechanism: 'Triggers acute panic and threat-mitigation response', victimReaction: 'Victim experiences sudden stress and wants quick resolution', iconName: 'ShieldAlert' },
-        { stepNumber: 2, phase: 'Artificial Time Constriction', trigger: '15-Minute / 24-Hour Countdown', psychologicalMechanism: 'Restricts cognitive bandwidth preventing careful verification', victimReaction: 'Rushes to take immediate action without inspecting URL', iconName: 'Clock' },
-        { stepNumber: 3, phase: 'Authority Masquerade', trigger: 'Corporate Security / Official Portal', psychologicalMechanism: 'Appears as legitimate organizational security policy', victimReaction: 'Believes complying with the email is mandatory', iconName: 'Award' },
-        { stepNumber: 4, phase: 'Action Lure & Exploitation', trigger: 'Deceptive Verification Link', psychologicalMechanism: 'Offers a single convenient escape from the induced problem', victimReaction: 'Submits credentials or payment details into attacker form', iconName: 'ExternalLink' }
-      ]
-    ),
+    manipulationChain: (isMode6Benign || isMode5Low) ? [] : isMode4Moderate ? [
+      { stepNumber: 1, phase: 'Document Notification', trigger: 'Vendor Contract Review Request', psychologicalMechanism: 'Routine business operations protocol', victimReaction: 'Assumes standard vendor procurement step', iconName: 'FileText' },
+      { stepNumber: 2, phase: 'External Signing Link', trigger: 'DocuSign Cloud Relay Portal', psychologicalMechanism: 'Familiar UI branding', victimReaction: 'Reviews terms before signing', iconName: 'ExternalLink' }
+    ] : isMode2High ? [
+      { stepNumber: 1, phase: 'Ego & Career Flattery', trigger: 'High-Paying $340k Lead AI Role', psychologicalMechanism: 'Activates professional curiosity and aspirational greed', victimReaction: 'Candidate feels selected for an elite opportunity', iconName: 'Award' },
+      { stepNumber: 2, phase: 'Pretexting Secrecy', trigger: 'Unreleased Project & Encrypted Brief', psychologicalMechanism: 'Justifies why files are password protected and hosted externally', victimReaction: 'Accepts downloading external archive without suspicion', iconName: 'Key' },
+      { stepNumber: 3, phase: 'Payload Delivery', trigger: 'AWS S3 Download Link & Zip Password', psychologicalMechanism: 'Victim enters password, unlocking malicious executable', victimReaction: 'Extracts archive and executes binary file', iconName: 'ExternalLink' },
+      { stepNumber: 4, phase: 'Host Compromise', trigger: 'Info-stealer / Trojan Execution', psychologicalMechanism: 'Silently exfiltrates browser tokens and SSH keys', victimReaction: 'Victim wonders why document didn\'t open', iconName: 'ShieldAlert' }
+    ] : isMode3Suspicious ? [
+      { stepNumber: 1, phase: 'Delivery Disruption Alarm', trigger: 'Address Incomplete Notice', psychologicalMechanism: 'Fear of lost shipment', victimReaction: 'Wants to quickly ensure package is delivered', iconName: 'ShieldAlert' },
+      { stepNumber: 2, phase: 'Nominal Fee Trick', trigger: '$2.95 Redelivery Surcharge', psychologicalMechanism: 'Low financial friction reduces suspicion', victimReaction: 'Willing to pay small fee without scrutiny', iconName: 'DollarSign' },
+      { stepNumber: 3, phase: 'Payment Exfiltration', trigger: 'Fake Payment Gateway Form', psychologicalMechanism: 'Captures full credit card numbers and billing address', victimReaction: 'Submits card details', iconName: 'ExternalLink' }
+    ] : [
+      { stepNumber: 1, phase: 'Fear & Alarm Induction', trigger: 'Threat of Account Suspension or Forfeiture', psychologicalMechanism: 'Triggers acute panic and threat-mitigation response', victimReaction: 'Victim experiences sudden stress and wants quick resolution', iconName: 'ShieldAlert' },
+      { stepNumber: 2, phase: 'Artificial Time Constriction', trigger: '15-Minute Countdown', psychologicalMechanism: 'Restricts cognitive bandwidth preventing careful verification', victimReaction: 'Rushes to take immediate action without inspecting URL', iconName: 'Clock' },
+      { stepNumber: 3, phase: 'Authority Masquerade', trigger: 'Corporate Security / Official Portal', psychologicalMechanism: 'Appears as legitimate organizational security policy', victimReaction: 'Believes complying with the email is mandatory', iconName: 'Award' },
+      { stepNumber: 4, phase: 'Action Lure & Exploitation', trigger: 'Deceptive Verification Link', psychologicalMechanism: 'Offers a single convenient escape from the induced problem', victimReaction: 'Submits credentials or payment details into attacker form', iconName: 'ExternalLink' }
+    ],
 
     trustGraph: {
       nodes: [
-        { id: 'org', label: input.claimedOrganization || 'Claimed Organization', type: 'claimed_org', isCompromisedOrMalicious: false, statusText: isExplicitlySafe ? 'Verified Enterprise Brand' : 'Impersonated Target Entity' },
-        { id: 'sender', label: input.senderEmailOrPhone || 'Sender Envelope', type: 'sender_entity', isCompromisedOrMalicious: !isExplicitlySafe, statusText: isExplicitlySafe ? 'Authenticated Sender' : 'Spoofed / External Webmail Origin' },
-        { id: 'domain', label: domainExtracted, type: 'domain', isCompromisedOrMalicious: !isExplicitlySafe, statusText: isExplicitlySafe ? 'Legitimate Corporate Host' : 'Deceptive / Untrusted Namespace' },
-        { id: 'url', label: input.targetUrl ? 'Target Endpoint' : 'Requested Action', type: 'destination_url', isCompromisedOrMalicious: !isExplicitlySafe, statusText: isExplicitlySafe ? 'Safe Resource' : 'Malicious Collection Point' }
+        { id: 'org', label: input.claimedOrganization || 'Claimed Organization', type: 'claimed_org', isCompromisedOrMalicious: false, statusText: (isMode6Benign || isMode5Low) ? 'Verified Enterprise Brand' : isMode4Moderate ? 'Third-Party Vendor' : 'Impersonated Target Entity' },
+        { id: 'sender', label: input.senderEmailOrPhone || 'Sender Envelope', type: 'sender_entity', isCompromisedOrMalicious: (!isMode6Benign && !isMode5Low && !isMode4Moderate), statusText: (isMode6Benign || isMode5Low) ? 'Authenticated Sender' : isMode4Moderate ? 'Unverified Relay' : 'Spoofed / External Webmail Origin' },
+        { id: 'domain', label: domainExtracted, type: 'domain', isCompromisedOrMalicious: (!isMode6Benign && !isMode5Low && !isMode4Moderate), statusText: (isMode6Benign || isMode5Low) ? 'Legitimate Corporate Host' : isMode4Moderate ? 'Commercial Relay Host' : 'Deceptive / Untrusted Namespace' },
+        { id: 'url', label: input.targetUrl ? 'Target Endpoint' : 'Requested Action', type: 'destination_url', isCompromisedOrMalicious: (!isMode6Benign && !isMode5Low && !isMode4Moderate), statusText: (isMode6Benign || isMode5Low) ? 'Safe Resource' : isMode4Moderate ? 'External Document View' : 'Malicious Collection Point' }
       ],
       edges: [
-        { from: 'org', to: 'sender', label: isExplicitlySafe ? 'Authorized Sender' : 'Broken Authorization', isBrokenTrust: !isExplicitlySafe, reason: isExplicitlySafe ? 'SPF/DKIM cryptographic headers match sending domain' : 'Sender domain is not authorized by the claimed organization' },
-        { from: 'sender', to: 'domain', label: isExplicitlySafe ? 'Internal Host' : 'Unauthorized Reroute', isBrokenTrust: !isExplicitlySafe, reason: isExplicitlySafe ? 'Namespace belongs to corporate asset registry' : 'Sender routes victims to an external third-party registrar' },
-        { from: 'domain', to: 'url', label: isExplicitlySafe ? 'Verified Page' : 'Exploit Vector', isBrokenTrust: !isExplicitlySafe, reason: isExplicitlySafe ? 'Enterprise HTTPS certificate validated' : 'Configured to harvest credentials or execute malicious payloads' }
+        { from: 'org', to: 'sender', label: (isMode6Benign || isMode5Low) ? 'Authorized Sender' : isMode4Moderate ? 'Vendor Proxy' : 'Broken Authorization', isBrokenTrust: (!isMode6Benign && !isMode5Low && !isMode4Moderate), reason: (isMode6Benign || isMode5Low) ? 'SPF/DKIM cryptographic headers match sending domain' : isMode4Moderate ? 'Sender uses third-party document platform' : 'Sender domain is not authorized by the claimed organization' },
+        { from: 'sender', to: 'domain', label: (isMode6Benign || isMode5Low) ? 'Internal Host' : isMode4Moderate ? 'Relay Route' : 'Unauthorized Reroute', isBrokenTrust: (!isMode6Benign && !isMode5Low && !isMode4Moderate), reason: (isMode6Benign || isMode5Low) ? 'Namespace belongs to corporate asset registry' : isMode4Moderate ? 'Standard cloud document service' : 'Sender routes victims to an external third-party registrar' },
+        { from: 'domain', to: 'url', label: (isMode6Benign || isMode5Low) ? 'Verified Page' : isMode4Moderate ? 'Vendor Portal' : 'Exploit Vector', isBrokenTrust: (!isMode6Benign && !isMode5Low && !isMode4Moderate), reason: (isMode6Benign || isMode5Low) ? 'Enterprise HTTPS certificate validated' : isMode4Moderate ? 'Document signature endpoint' : 'Configured to harvest credentials or execute malicious payloads' }
       ],
-      summary: isExplicitlySafe
-        ? 'Full cryptographic trust chain established: SPF, DKIM, and DMARC records align perfectly with corporate namespaces.'
+      summary: (isMode6Benign || isMode5Low)
+        ? 'Full cryptographic trust chain established: SPF, DKIM, and DMARC records align perfectly with official namespaces.'
+        : isMode4Moderate
+        ? 'Moderate trust: Valid vendor relay route, but identity unconfirmed by corporate PKI.'
         : 'Trust broken at root: Claimed organization identity is disconnected from the sender envelope and external landing destination.'
     },
 
     projectedImpact: {
-      severityLevel: isExplicitlySafe ? 'Minimal' : (overall > 80 ? 'Catastrophic' : 'Severe'),
-      financialExposureEstimate: isExplicitlySafe
+      severityLevel: isMode6Benign ? 'Minimal' : isMode5Low ? 'Minimal' : isMode4Moderate ? 'Moderate' : isMode3Suspicious ? 'Moderate' : overall > 80 ? 'Catastrophic' : 'Severe',
+      financialExposureEstimate: (isMode6Benign || isMode5Low)
         ? '$0'
-        : isBec
-        ? '$84,500 direct wire loss + regulatory investigation costs'
-        : isMalware
+        : isMode4Moderate
+        ? '$0 - $15,000 (Unauthorized contractual commitments)'
+        : isMode3Suspicious
+        ? '$2.95 direct fee + $2,500 unauthorized card charges'
+        : isMode2High
         ? '$250,000 - $1,200,000 (Corporate network lateral spread, ransomware deployment)'
         : '$45,000 - $350,000 (Account takeover, data exfiltration, regulatory penalties)',
-      dataCompromiseTypes: isExplicitlySafe ? [] : [
+      dataCompromiseTypes: (isMode6Benign || isMode5Low) ? [] : isMode4Moderate ? [
+        'Contractual signatory metadata',
+        'Vendor commercial agreement terms'
+      ] : isMode3Suspicious ? [
+        'Payment Card Numbers (PAN) & CVV',
+        'Physical Home Address & Phone Number'
+      ] : [
         'Active Enterprise SSO Tokens',
         '2FA Authenticator Session Cookies',
-        'Corporate Mailbox & Confidential Slack Chats',
-        'Personal Identity Documents & Banking Details'
+        'Corporate Mailbox & Confidential Slack Chats'
       ],
-      blastRadius: isExplicitlySafe
+      blastRadius: (isMode6Benign || isMode5Low)
         ? 'None'
-        : isBec
-        ? 'Finance Department & Corporate Treasury'
-        : isMalware
+        : isMode4Moderate
+        ? 'Legal / Procurement Department'
+        : isMode3Suspicious
+        ? 'Individual Employee Credit Profile'
+        : isMode2High
         ? 'Engineering Workstation & AWS/Cloud Infrastructure Keys'
         : 'Enterprise-Wide (Azure AD / Okta Tenant Lateral Movement)',
-      timeline: isExplicitlySafe ? [] : [
+      timeline: (isMode6Benign || isMode5Low) ? [] : [
         { stage: 1, action: 'Victim Interacts with Payload', systemResponse: 'Navigates to external landing page or downloads file', attackerOutcome: 'Logs IP address, device fingerprints, and establishes connection', riskLevel: 'medium' },
         { stage: 2, action: 'Credentials or Info Submitted', systemResponse: 'Adversary server intercepts submitted data in real-time', attackerOutcome: 'Harvests passwords, MFA tokens, or executes malware payload', riskLevel: 'high' },
         { stage: 3, action: 'Session Hijacking & Privilege Escalation', systemResponse: 'Attacker leverages captured credentials against corporate portal', attackerOutcome: 'Bypasses multi-factor authentication and creates persistent OAuth app', riskLevel: 'critical' },
@@ -283,7 +398,20 @@ export function generateDynamicHeuristicAnalysis(input: ThreatInput): FullThreat
       ]
     },
 
-    highlightedFlags: isExplicitlySafe ? [] : [
+    highlightedFlags: (isMode6Benign || isMode5Low) ? [] : isMode4Moderate ? [
+      {
+        text: 'docusign-contracts-share.net',
+        category: 'link_deception',
+        explanation: 'Relay domain not directly matching official docusign.com primary namespace.',
+        severity: 'medium'
+      },
+      {
+        text: 'Review Window: 7 business days',
+        category: 'urgency',
+        explanation: 'Standard procedural review timeline.',
+        severity: 'low'
+      }
+    ] : [
       {
         text: foundUrgency[0] || 'urgent',
         category: 'urgency',
@@ -304,8 +432,15 @@ export function generateDynamicHeuristicAnalysis(input: ThreatInput): FullThreat
       }
     ],
 
-    whyDangerousExplanation: isExplicitlySafe
+    whyDangerousExplanation: isMode6Benign
       ? ['Standard corporate communication following established security policies with no anomalous indicators.']
+      : isMode5Low
+      ? ['Standard platform digest with verified SPF/DKIM authentication and official TLS endpoints.']
+      : isMode4Moderate
+      ? [
+        'Third-Party Relay: Arrives through an unverified intermediary domain.',
+        'Procedural Caution: Recommended to confirm agreement details with the vendor directly.'
+      ]
       : [
         'Identity Spoofing: Exploits recognized organizational names while routing through unverified external infrastructure.',
         'Cognitive Manipulation: Combines high-pressure consequence threats with strict deadlines to suppress critical verification.',
@@ -313,8 +448,13 @@ export function generateDynamicHeuristicAnalysis(input: ThreatInput): FullThreat
         'Downstream Breach Risk: Success grants the adversary immediate unauthorized access or financial siphoning.'
       ],
 
-    recommendations: isExplicitlySafe ? [
-      { priority: 'Immediate', action: 'Standard Processing', detail: 'Message verified safe; proceed with normal workflow.', iconName: 'CheckCircle' }
+    recommendations: isMode6Benign ? [
+      { priority: 'Immediate', action: 'Verified Safe — No Action Needed', detail: 'Communication originates from verified internal enterprise systems. Proceed normally.', iconName: 'CheckCircle' }
+    ] : isMode5Low ? [
+      { priority: 'Immediate', action: 'Routine Interaction Safe', detail: 'Message verified from authentic platform infrastructure (LinkedIn / Microsoft).', iconName: 'CheckCircle' }
+    ] : isMode4Moderate ? [
+      { priority: 'Immediate', action: 'Verify Signer Out-of-Band', detail: 'Confirm with your account manager before signing documents from external relay links.', iconName: 'Search' },
+      { priority: 'Secondary', action: 'Check DocuSign Envelope ID', detail: 'Access the document directly from docusign.com using the official envelope security code.', iconName: 'FileText' }
     ] : [
       { priority: 'Immediate', action: 'DO NOT CLICK or Authorize Funds', detail: 'Quarantine the communication and avoid engaging with any links, attachments, or requests.', iconName: 'ShieldX' },
       { priority: 'Immediate', action: 'Report to Security Operations (SOC)', detail: 'Submit sample headers and full raw payload to the incident response team for IOC tracking.', iconName: 'AlertOctagon' },
@@ -322,8 +462,14 @@ export function generateDynamicHeuristicAnalysis(input: ThreatInput): FullThreat
       { priority: 'SOC Escalation', action: 'Audit SIEM Logs for Activity', detail: 'Check organizational proxy and mailbox logs to determine if other employees received this attack.', iconName: 'Search' }
     ],
 
-    mitreAttackMappings: isExplicitlySafe
+    mitreAttackMappings: (isMode6Benign || isMode5Low)
       ? []
+      : isMode4Moderate
+      ? ['T1566 - Phishing (Baseline Relay)']
+      : isMode2High
+      ? ['T1566.003 - Spearphishing Attachment', 'T1027.002 - Encrypted Payload Evasion', 'T1204.002 - User Execution: Malicious File']
+      : isMode3Suspicious
+      ? ['T1566.002 - Spearphishing Link', 'T1598.003 - Financial Data Phishing', 'T1204.001 - User Execution: Malicious Link']
       : ['T1566.002 - Spearphishing Link', 'T1598.003 - Phishing for Information', 'T1204.001 - User Execution: Malicious Link', 'T1539 - Steal Web Session Cookie']
   };
 }

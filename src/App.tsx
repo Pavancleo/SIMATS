@@ -594,7 +594,10 @@ export default function App() {
                               <span className="font-semibold text-slate-200">Loaded Threat Scenario:</span>
                               <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                                 selectedSample.threatLevelExpected === 'Critical' ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' :
-                                selectedSample.threatLevelExpected === 'High' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' :
+                                selectedSample.threatLevelExpected === 'High' ? 'bg-orange-500/20 text-orange-300 border border-orange-500/40' :
+                                selectedSample.threatLevelExpected === 'Suspicious' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' :
+                                selectedSample.threatLevelExpected === 'Moderate' ? 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/40' :
+                                selectedSample.threatLevelExpected === 'Low' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40' :
                                 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
                               }`}>
                                 {selectedSample.badge}

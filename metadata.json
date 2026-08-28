@@ -1,0 +1,6 @@
+{
+  "name": "Marketeam",
+  "description": "A single-page marketing talent platform landing page featuring interactive concentric circles visualization, typewriter heading, and partner logo ticker.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -8,6 +8,8 @@
 
 Modern cyberattacks increasingly exploit human psychology (urgency, fear, authority impersonation) rather than obvious known malicious URLs. **CyberSentinel** goes beyond static signature filters to understand message intent, cognitive manipulation mechanisms, and structural domain inconsistencies.
 
+![Alt Text](hero.jpg)
+
 ---
 
 ## ⚡ Core Features
